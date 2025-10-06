@@ -4,7 +4,7 @@ import { PencilIcon, TrashIcon, PlusIcon, XMarkIcon } from "@heroicons/react/24/
 
 const mockAssets = [
   { id: "A001", name: "کامپیوتر اداری", type: "کامپیوتر", status: "فعال", department: "اداره انفورماتیک", purchaseDate: "2025-01-10", owner: "علی رضایی" },
-  { id: "A002", name: "پرینتر لیزری", type: "پرینتر", status: "در تعمیر", department: "اداره انفورماتیک", purchaseDate: "2024-10-05", owner: "مریم احمدی" },
+  { id: "A002", name: "پرینتر لیزری", type: "پرینتر", status: "درحال تعمیر", department: "اداره انفورماتیک", purchaseDate: "2024-10-05", owner: "مریم احمدی" },
   { id: "A003", name: "میز اداری", type: "مبلمان", status: "فعال", department: "اداره انفورماتیک", purchaseDate: "2023-07-20", owner: "حمید رضایی" },
 ];
 
@@ -88,68 +88,94 @@ export default function PropertyListPage() {
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto bg-white rounded shadow">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="px-4 py-2 text-left text-gray-700">شماره</th>
-              <th className="px-4 py-2 text-left text-gray-700">نام</th>
-              <th className="px-4 py-2 text-left text-gray-700">نوع</th>
-              <th className="px-4 py-2 text-left text-gray-700">وضعیت</th>
-              <th className="px-4 py-2 text-left text-gray-700">بخش</th>
-              <th className="px-4 py-2 text-left text-gray-700">تاریخ خرید</th>
-              <th className="px-4 py-2 text-left text-gray-700">کاربر مسئول</th>
-              <th className="px-4 py-2 text-center text-gray-700">عملیات</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200">
-            {paginatedAssets.map((asset) => (
-              <tr key={asset.id} className="hover:bg-gray-50">
-                <td className="px-4 py-2">{asset.id}</td>
-                <td className="px-4 py-2">{asset.name}</td>
-                <td className="px-4 py-2">{asset.type}</td>
-                <td className="px-4 py-2">
-                  <span
-                    className={`px-2 py-1 rounded text-white text-xs ${
-                      asset.status === "فعال"
-                        ? "bg-green-500"
-                        : asset.status === "در تعمیر"
-                        ? "bg-yellow-500"
-                        : "bg-red-500"
-                    }`}
-                  >
-                    {asset.status}
-                  </span>
-                </td>
-                <td className="px-4 py-2">{asset.department}</td>
-                <td className="px-4 py-2">{asset.purchaseDate}</td>
-                <td className="px-4 py-2">{asset.owner}</td>
-                <td className="px-4 py-2 flex justify-center gap-2">
-                  <button
-                    className="p-1 rounded hover:bg-gray-100"
-                    onClick={() => openEditModal(asset)}
-                  >
-                    <PencilIcon className="w-5 h-5 text-blue-500" />
-                  </button>
-                  <button
-                    className="p-1 rounded hover:bg-gray-100"
-                    onClick={() => handleDelete(asset.id)}
-                  >
-                    <TrashIcon className="w-5 h-5 text-red-500" />
-                  </button>
-                </td>
-              </tr>
-            ))}
+      <div className="flex flex-col">
+        <div className="-m-1.5 overflow-x-auto">
+          <div className="p-1.5 min-w-full inline-block align-middle">
+            <div className="overflow-hidden">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead>
+                  <tr>
+                    <th scope="col" className="px-6 py-3 text-right text-sm font-medium text-gray-500 uppercase">شماره</th>
+                    <th scope="col" className="px-6 py-3 text-right text-sm font-medium text-gray-500 uppercase">نام</th>
+                    <th scope="col" className="px-6 py-3 text-right text-sm font-medium text-gray-500 uppercase">نوع</th>
+                    <th scope="col" className="px-6 py-3 text-right text-sm font-medium text-gray-500 uppercase">وضعیت</th>
+                    <th scope="col" className="px-6 py-3 text-right text-sm font-medium text-gray-500 uppercase">بخش</th>
+                    <th scope="col" className="px-6 py-3 text-right text-sm font-medium text-gray-500 uppercase">تاریخ خرید</th>
+                    <th scope="col" className="px-6 py-3 text-right text-sm font-medium text-gray-500 uppercase">کاربر مسئول</th>
+                    <th scope="col" className="px-6 py-3 text-center text-sm font-medium text-gray-500 uppercase">عملیات</th>
 
-            {paginatedAssets.length === 0 && (
-              <tr>
-                <td colSpan="8" className="px-4 py-4 text-center text-gray-500">
-                  موردی یافت نشد
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+
+
+                  </tr>
+                </thead>
+                <tbody>
+                  {paginatedAssets.map((asset) => (
+                    <tr key={asset.id} className="odd:bg-white even:bg-gray-100 hover:bg-gray-100">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">{asset.id}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">{asset.name}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">{asset.type}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">
+
+
+                        <span class={`py-1 px-1.5  inline-flex items-center gap-x-1 text-xs font-medium ${asset.status === "فعال" ? "bg-teal-50 text-teal-600 rounded-full" :
+                          asset.status === "درحال تعمیر" ? "bg-orange-50 text-orange-600 rounded-full" :
+                            "bg-red-50 text-red-600 rounded-full"
+
+                          } `}>
+                          {
+                            asset.status === "فعال" ? <svg class="size-4  rounded-full" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                              <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+                            </svg> :
+                              asset.status === "درحال تعمیر" ?
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 22 22" width="16" height="16" strokeWidth={1.5} stroke="currentColor" className="size-4 ">
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+                                </svg>
+                                :
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 22 22" strokeWidth={1.5} stroke="currentColor" className="size-4">
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+                                </svg>
+
+
+
+                          }
+
+                          {asset.status}
+                        </span>
+
+
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">{asset.department}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">{asset.purchaseDate}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">{asset.owner}</td>
+                      <td className="px-6 py-4 flex justify-center  gap-2">
+                        <button
+                          className=" hover:bg-gray-100 bg-blue-50 rounded-full p-1.5"
+                          onClick={() => openEditModal(asset)}
+                        >
+                          <PencilIcon className="w-5 h-5 text-blue-500" />
+                        </button>
+                        <button
+                          className="bg-red-50 rounded-full p-1.5 hover:bg-gray-100"
+                          onClick={() => handleDelete(asset.id)}
+                        >
+                          <TrashIcon className="w-5 h-5 text-red-500" />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+
+                  {paginatedAssets.length === 0 && (
+                    <tr>
+                      <td colSpan="8" className="px-4 py-4 text-center text-gray-500">
+                        موردی یافت نشد
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Pagination */}
@@ -220,7 +246,7 @@ export default function PropertyListPage() {
               >
                 <option value="فعال">فعال</option>
                 <option value="در تعمیر">در تعمیر</option>
-                <option value="مستعمل">مستعمل</option>
+                <option value="از رده خارج">از رده خارج</option>
               </select>
               <input
                 type="text"
@@ -252,7 +278,25 @@ export default function PropertyListPage() {
           </div>
         </div>
       )}
+
+
     </div>
+
   );
 }
 
+
+
+//  <span
+//                         className={`px-2 py-1 rounded text-white text-xs ${asset.status === "فعال"
+//                           ? "bg-green-500"
+//                           : asset.status === "در تعمیر"
+//                             ? "bg-yellow-500"
+//                             : "bg-red-500"
+//                           }`}
+//                       >
+//                         {asset.status}
+//                       </span>
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+  <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+</svg>
