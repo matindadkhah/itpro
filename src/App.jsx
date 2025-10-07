@@ -17,6 +17,8 @@ import TrainingUploadPage from './pages/Training/TrainingUploadPage';
 import ServersPage from './pages/NetworkStatus/ServersPage';
 import GatewaysPage from './pages/NetworkStatus/GatewaysPage';
 import NetworkStatusSetting from './pages/NetworkStatus/NetworkStatusSetting';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 function App() {
@@ -25,7 +27,7 @@ function App() {
 
   return (
     <>
-
+      <ToastContainer />
       <Router>
         <Routes>
           <Route path="/" element={<ItProPage />}>
@@ -45,7 +47,7 @@ function App() {
             <Route path='/network-status/servers' element={<ServersPage />} />
             <Route path='/network-status/gateways' element={<GatewaysPage />} />
             <Route path='/network-status/settings' element={<NetworkStatusSetting />} />
-           
+
 
 
           </Route>

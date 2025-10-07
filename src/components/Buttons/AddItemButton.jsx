@@ -7,9 +7,9 @@ const AddItemButton = ({ openAddModal }) => {
             className="relative inline-flex items-center justify-start py-2 pl-4 pr-12 
              overflow-hidden font-semibold text-white transition-all duration-150 
              ease-in-out rounded-2xl hover:pl-10 hover:pr-6 bg-gradient-to-r 
-          from-blue-400 via-indigo-500 to-purple-400 group"
+          from-[#FF4B4B] via-[#FF6F61] to-[#FF914D] group"
         >
-            <span className="absolute bottom-0 left-0 w-full h-1 transition-all duration-150 ease-in-out bg-gradient-to-r from-blue-400 via-indigo-500 to-purple-400 group-hover:h-full"></span>
+            <span className="absolute bottom-0 left-0 w-full h-1 transition-all duration-150 ease-in-out bg-gradient-to-r from-[#FF4B4B] via-[#FF6F61] to-[#FF914D] group-hover:h-full"></span>
 
             <span className="absolute right-0 pr-4 duration-200 ease-out group-hover:translate-x-12">
                 <svg
