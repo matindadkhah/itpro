@@ -10,12 +10,32 @@ import { TimelineLogger } from "../../components/TimelineLogger/TimelineLogger";
 const mockAssets = [
   { id: "A001", name: "کامپیوتر اداری", type: "کامپیوتر", status: "فعال", department: "اداره انفورماتیک", purchaseDate: "2024-10-05", owner: "علی رضایی" },
   { id: "A002", name: "پرینتر لیزری", type: "پرینتر", status: "درحال تعمیر", department: "اداره انفورماتیک", purchaseDate: "2024-10-05", owner: "مریم احمدی" },
-  { id: "A003", name: "میز اداری", type: "مبلمان", status: "فعال", department: "اداره انفورماتیک", purchaseDate: "2023-07-20", owner: "حمید رضایی" },
-  { id: "A004", name: "سرور شبکه", type: "سرور", status: "فعال", department: "شبکه", purchaseDate: "2023-03-15", owner: "حسین کریمی" },
-  { id: "A005", name: "روتر", type: "شبکه", status: "درحال تعمیر", department: "شبکه", purchaseDate: "2024-05-20", owner: "مریم احمدی" },
-  { id: "A006", name: "روتر", type: "شبکه", status: "فعال", department: "شبکه", purchaseDate: "2024-05-20", owner: "مریم" },
-  { id: "A007", name: "سوییچ", type: "شبکه", status: "فعال", department: "شبکه", purchaseDate: "2024-05-20", owner: "متین" },
-  { id: "A008", name: "سوییچ", type: "شبکه", status: "فعال", department: "شبکه", purchaseDate: "2024-05-20", owner: "متین" },
+  { id: "A003", name: "میز اداری عملیات", type: "مبلمان", status: "فعال", department: "اداره انفورماتیک", purchaseDate: "2023-07-20", owner: "حمید رضایی" },
+    { id: "A004", name: "میز اداری عملیات", type: "مبلمان", status: "فعال", department: "اداره انفورماتیک", purchaseDate: "2023-07-20", owner: "حمید رضایی" },
+        { id: "A004", name: "میز اداری عملیات", type: "مبلمان", status: "فعال", department: "اداره انفورماتیک", purchaseDate: "2023-07-20", owner: "حمید رضایی" },
+
+
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

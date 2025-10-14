@@ -58,10 +58,10 @@ const CustomTable = ({
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg border border-gray-200 bg-white">
       <table className="w-full text-sm text-left text-gray-700">
         {/* Header */}
-        <thead className="text-xs uppercase bg-gray-50 text-gray-600">
+        <thead className="text-sm uppercase bg-gray-50 text-gray-600">
           <tr>
             {columns.map((col) => (
-              <th key={col.key} scope="col" className="px-6 py-3">
+              <th key={col.key} scope="col" className="px-6 py-3 text-right">
                 {col.label}
               </th>
             ))}
@@ -91,7 +91,7 @@ const CustomTable = ({
                 className="bg-white border-b hover:bg-gray-50 transition"
               >
                 {columns.map((col) => (
-                  <td key={col.key} className="px-6 py-4 whitespace-nowrap">
+                  <td key={col.key} className="px-6 py-4 whitespace-nowrap text-right">
                     {row[col.key]}
                   </td>
                 ))}
