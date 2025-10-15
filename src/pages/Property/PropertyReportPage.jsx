@@ -10,32 +10,6 @@ import { TimelineLogger } from "../../components/TimelineLogger/TimelineLogger";
 const mockAssets = [
   { id: "A001", name: "کامپیوتر اداری", type: "کامپیوتر", status: "فعال", department: "اداره انفورماتیک", purchaseDate: "2024-10-05", owner: "علی رضایی" },
   { id: "A002", name: "پرینتر لیزری", type: "پرینتر", status: "درحال تعمیر", department: "اداره انفورماتیک", purchaseDate: "2024-10-05", owner: "مریم احمدی" },
-  { id: "A003", name: "میز اداری عملیات", type: "مبلمان", status: "فعال", department: "اداره انفورماتیک", purchaseDate: "2023-07-20", owner: "حمید رضایی" },
-    { id: "A004", name: "میز اداری عملیات", type: "مبلمان", status: "فعال", department: "اداره انفورماتیک", purchaseDate: "2023-07-20", owner: "حمید رضایی" },
-        { id: "A004", name: "میز اداری عملیات", type: "مبلمان", status: "فعال", department: "اداره انفورماتیک", purchaseDate: "2023-07-20", owner: "حمید رضایی" },
-
-
-    
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
