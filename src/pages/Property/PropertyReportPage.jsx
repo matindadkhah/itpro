@@ -8,8 +8,15 @@ import { TimelineLogger } from "../../components/TimelineLogger/TimelineLogger";
 
 // داده نمونه
 const mockAssets = [
-  { id: "A001", name: "کامپیوتر اداری", type: "کامپیوتر", status: "فعال", department: "اداره انفورماتیک", purchaseDate: "2024-10-05", owner: "علی رضایی" },
-  { id: "A002", name: "پرینتر لیزری", type: "پرینتر", status: "درحال تعمیر", department: "اداره انفورماتیک", purchaseDate: "2024-10-05", owner: "مریم احمدی" },
+  { id: "A002", name: "اداری", type: "کامپیوتر", status: "فعال", department: "اداره انفورماتیک", purchaseDate: "2024-10-05", owner: "علی رضایی" },
+    { id: "A003", name: "اداری", type: "کامپیوتر", status: "غیرفعال", department: "اداره انفورماتیک", purchaseDate: "2024-10-05", owner: "علی رضایی" },
+        { id: "A004", name: "اداری", type: "کامپیوتر", status: "غیرفعال", department: "اداره انفورماتیک", purchaseDate: "2024-10-05", owner: "علی رضایی" },
+          { id: "A005", name: "اداری", type: "کامپیوتر", status: "غیرفعال", department: "اداره انفورماتیک", purchaseDate: "2024-10-05", owner: "علی رضایی" },
+           { id: "A006", name: "اتش نشانی", type: "کامپیوتر", status: "فعال", department: "اداره انفورماتیک", purchaseDate: "2024-10-05", owner: "علی رضایی" },
+
+
+
+
 
 
 

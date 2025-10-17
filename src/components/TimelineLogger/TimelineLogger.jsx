@@ -1,106 +1,142 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { XMarkIcon, InformationCircleIcon } from "@heroicons/react/24/solid";
+import { XMarkIcon } from "@heroicons/react/24/solid";
+import DatePicker, { Calendar } from "react-multi-date-picker";
+import persian from "react-date-object/calendars/persian";
+import persian_fa from "react-date-object/locales/persian_fa";
 import jalaali from "jalaali-js";
 
-// -------------------- Hook ثبت تغییرات لحظه‌ای --------------------
+// -------------------- Hook ثبت تغییرات --------------------
 function useChangeLogger(data) {
+  const prevDataRef = useRef([]);
   const [logs, setLogs] = useState([]);
-  const prevDataRef = useRef(data || []);
 
   useEffect(() => {
     const prevData = prevDataRef.current;
+    const newLogs = [];
 
-    const added = data.filter(d => !prevData.some(p => p.id === d.id));
-    const removed = prevData.filter(p => !data.some(d => d.id === p.id));
-    const updated = data.filter(d => {
-      const prevItem = prevData.find(p => p.id === d.id);
-      return prevItem && (
-        prevItem.name !== d.name ||
-        prevItem.status !== d.status ||
-        prevItem.owner !== d.owner
-      );
+    // اضافه شدن یا تغییرات
+    data.forEach((item) => {
+      const oldItem = prevData.find((p) => p.id === item.id);
+      if (!oldItem) {
+        newLogs.push({
+          id: Date.now() + Math.random(),
+          type: "اضافه شد",
+          item,
+          timestamp: new Date(),
+        });
+      } else {
+        const diffs = [];
+        Object.keys(item).forEach((key) => {
+          if (item[key] !== oldItem[key]) {
+            diffs.push(`${key}: "${oldItem[key]}" → "${item[key]}"`);
+          }
+        });
+        if (diffs.length > 0) {
+          newLogs.push({
+            id: Date.now() + Math.random(),
+            type: "ویرایش شد",
+            item,
+            changes: diffs,
+            timestamp: new Date(),
+          });
+        }
+      }
     });
 
-    if (added.length || removed.length || updated.length) {
-      const now = new Date();
-      const newLogs = [
-        ...added.map(item => ({ type: "Added", item, createdAt: now })),
-        ...removed.map(item => ({ type: "Removed", item, createdAt: now })),
-        ...updated.map(item => ({ type: "Updated", item, createdAt: now }))
-      ];
-      setLogs(prev => [...prev, ...newLogs].slice(-200)); 
+    // حذف شدن
+    prevData.forEach((oldItem) => {
+      if (!data.find((item) => item.id === oldItem.id)) {
+        newLogs.push({
+          id: Date.now() + Math.random(),
+          type: "حذف شد",
+          item: oldItem,
+          timestamp: new Date(),
+        });
+      }
+    });
+
+    if (newLogs.length > 0) {
+      setLogs((prev) => [...newLogs, ...prev]);
     }
 
-    prevDataRef.current = [...data];
+    prevDataRef.current = data;
   }, [data]);
 
   return logs;
 }
 
-// -------------------- Helper: تبدیل تاریخ شمسی --------------------
+// -------------------- Helper تاریخ شمسی --------------------
 function formatJalaali(date) {
   const j = jalaali.toJalaali(date);
   const pad = (n) => n.toString().padStart(2, "0");
   return `${j.jy}/${pad(j.jm)}/${pad(j.jd)}`;
 }
 
+function formatRelativeDate(date) {
+  const today = new Date();
+  const yesterday = new Date();
+  yesterday.setDate(today.getDate() - 1);
+
+  if (date.toDateString() === today.toDateString()) return "امروز";
+  if (date.toDateString() === yesterday.toDateString()) return "دیروز";
+
+  const weekdays = ["یکشنبه", "دوشنبه", "سه‌شنبه", "چهارشنبه", "پنج‌شنبه", "جمعه", "شنبه"];
+  const months = ["فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند"];
+  const j = jalaali.toJalaali(date);
+  const weekday = weekdays[date.getDay()];
+  const month = months[j.jm - 1];
+  return `${j.jd} ${weekday} ${month}`;
+}
+
 // -------------------- Timeline Item --------------------
 function TimelineItem({ log }) {
   const getColor = (type) => {
-    if (type === "Added") return "bg-green-500";
-    if (type === "Removed") return "bg-red-500";
+    if (type === "اضافه شد") return "bg-green-500";
+    if (type === "حذف شد") return "bg-red-500";
     return "bg-yellow-500";
   };
 
   return (
-    <div className="flex gap-x-3 relative group">
+    <div class="flex flex-row  flex-wrap gap-x-3 gap-y-4 relative group w-full">
       {/* Left Content */}
-      <div className="min-w-14 text-end">
+      <div className="min-w-10 text-end">
         <span className="text-xs text-gray-500 dark:text-neutral-400">
-          {new Date(log.createdAt).toLocaleTimeString("fa-IR", { hour: "2-digit", minute: "2-digit" })}
+          {new Date(log.timestamp).toLocaleTimeString("fa-IR", { hour: "2-digit", minute: "2-digit" })}
         </span>
         <br />
         <span className="text-xs text-gray-400">
-          {formatJalaali(new Date(log.createdAt))}
+          {formatRelativeDate(new Date(log.timestamp))}
         </span>
       </div>
 
       {/* Icon */}
-      <div className="relative last:after:hidden after:absolute after:top-7 after:bottom-0 after:start-3.5 after:w-px after:-translate-x-[0.5px] after:bg-gray-200 dark:after:bg-neutral-700">
+      <div className=" relative last:after:hidden after:absolute after:top-7 after:bottom-0 after:start-3.5 after:w-px after:-translate-x-[0.5px] after:bg-gray-200 dark:after:bg-neutral-700">
         <div className="relative z-10 size-7 flex justify-center items-center">
           <div className={`size-2 rounded-full ${getColor(log.type)}`}></div>
         </div>
       </div>
 
       {/* Right Content */}
-      <div className="grow pt-0.5 pb-8 relative">
-        <h3 className="flex gap-x-1.5 font-semibold text-gray-800 dark:text-white">
-          {log.type === "Added" && "Created"}
-          {log.type === "Updated" && "Updated"}
-          {log.type === "Removed" && "Removed"} "{log.item.name}"
+      <div className="grow pt-0.5 pb-8">
+        <h3 className="flex gap-x-1.5 font-medium text-gray-700 dark:text-white">
+          {log.type === "اضافه شد" ? <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="size-6 text-green-800 bg-green-100 p-1  rounded-full">
+            <path d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z" />
+          </svg>
+            : log.type === "حذف شد" ? <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="size-6 text-red-800 bg-red-100 p-1  rounded-full">
+              <path fillRule="evenodd" d="M8.75 1A2.75 2.75 0 0 0 6 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 1 0 .23 1.482l.149-.022.841 10.518A2.75 2.75 0 0 0 7.596 19h4.807a2.75 2.75 0 0 0 2.742-2.53l.841-10.52.149.023a.75.75 0 0 0 .23-1.482A41.03 41.03 0 0 0 14 4.193V3.75A2.75 2.75 0 0 0 11.25 1h-2.5ZM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4ZM8.58 7.72a.75.75 0 0 0-1.5.06l.3 7.5a.75.75 0 1 0 1.5-.06l-.3-7.5Zm4.34.06a.75.75 0 1 0-1.5-.06l-.3 7.5a.75.75 0 1 0 1.5.06l.3-7.5Z" clipRule="evenodd" />
+            </svg>
+              : <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="size-6 text-blue-800 bg-blue-100 p-1 rounded-full">
+                <path d="m2.695 14.762-1.262 3.155a.5.5 0 0 0 .65.65l3.155-1.262a4 4 0 0 0 1.343-.886L17.5 5.501a2.121 2.121 0 0 0-3-3L3.58 13.419a4 4 0 0 0-.885 1.343Z" />
+              </svg>
+          }
+          {log.item.name} {log.type}
         </h3>
         <p className="mt-1 text-sm text-gray-600 dark:text-neutral-400">
-          وضعیت: {log.item.status}
+          {log.item.type} | {log.item.status}
         </p>
-
-        {/* Tooltip */}
-        <div className="absolute top-0 left-full ml-2 hidden group-hover:block bg-gray-700 text-white text-xs p-2 rounded shadow-lg z-50 w-52">
-          <div>شناسه: {log.item.id}</div>
-          <div>نوع: {log.type}</div>
-          <div>دپارتمان: {log.item.department}</div>
-          <div>تاریخ خرید: {log.item.purchaseDate}</div>
-        </div>
-
-        <button
-          type="button"
-          className="mt-1 -ms-1 p-1 inline-flex items-center gap-x-2 text-xs rounded-lg border border-transparent text-gray-500 hover:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700"
-        >
-          <img
-            className="shrink-0 size-4 rounded-full"
-            src="https://images.unsplash.com/photo-1659482633369-9fe69af50bfb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8auto=format&fit=facearea&facepad=3&w=320&h=320&q=80"
-            alt={log.item.owner}
-          />
+        <button type="button" className="mt-1 -ms-1 p-1 inline-flex items-center gap-x-2 text-xs rounded-lg border border-transparent text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-neutral-400 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700">
+          <img className="shrink-0 size-4 rounded-full" src="https://images.unsplash.com/photo-1659482633369-9fe69af50bfb?auto=format&fit=facearea&facepad=3&w=320&h=320&q=80" alt={log.item.owner} />
           {log.item.owner}
         </button>
       </div>
@@ -112,19 +148,22 @@ function TimelineItem({ log }) {
 export function TimelineLogger({ data = [] }) {
   const logs = useChangeLogger(data);
   const [filterModalOpen, setFilterModalOpen] = useState(false);
-  const [filters, setFilters] = useState({ owner: "", type: "", date: "" });
+  const [filters, setFilters] = useState({ owner: "", type: "", date: null });
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  // فیلتر لاگ‌ها
-  const filteredLogs = logs.filter(log => {
-    const matchOwner = filters.owner ? log.item.owner.includes(filters.owner) : true;
+
+  const filteredLogs = logs.filter((log) => {
+    const matchOwner = filters.owner
+      ? log.item.owner.includes(filters.owner)
+      : true;
     const matchType = filters.type ? log.type === filters.type : true;
-    const matchDate = filters.date ? 
-      new Date(log.createdAt).toDateString() === new Date(filters.date).toDateString()
+    const matchDate = filters.date
+      ? new Date(log.timestamp).toDateString() === filters.date.toDate().toDateString()
       : true;
     return matchOwner && matchType && matchDate;
   });
 
-  const limitedLogs = filteredLogs.slice(-5);
+  const limitedLogs = filteredLogs.slice(0, 5);
 
   const logVariants = {
     hidden: { opacity: 0, y: -10 },
@@ -133,27 +172,22 @@ export function TimelineLogger({ data = [] }) {
   };
 
   return (
-    <div className="p-6 max-w-3xl mx-auto bg-white border border-gray-200 shadow-sm rounded-xl">
-      {/* هدر */}
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-bold">📌 تایم‌لاین تغییرات</h2>
-        <button
-          className="px-3 py-1 bg-blue-500 text-white rounded"
-          onClick={() => setFilterModalOpen(true)}
-        >
-          فیلتر / مشاهده همه
-        </button>
+    <div className="p-4 sm:p-4 max-w-3xl mx-auto bg-white border border-gray-200 shadow-sm rounded-xl">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2 sm:gap-0">
+        <h2 class="flex items-center gap-2 font-bold text-gray-700 mb-3">📌 تایم‌لاین تغییرات اموال</h2>
+
       </div>
 
-      {/* نمایش ۵ لاگ آخر */}
-      <div className="pt-7 pb-5">
+      {/* ۵ لاگ آخر */}
+      <div >
         {limitedLogs.length === 0 && (
-          <p className="text-center text-gray-500 py-6">موردی وجود ندارد</p>
+          <p className="text-center text-gray-500 pb-5">موردی وجود ندارد</p>
         )}
         <AnimatePresence>
-          {limitedLogs.map((log, idx) => (
+          {limitedLogs.map((log) => (
             <motion.div
-              key={`${log.type}-${log.item.id}-${idx}`}
+              key={log.id}
               variants={logVariants}
               initial="hidden"
               animate="visible"
@@ -166,81 +200,186 @@ export function TimelineLogger({ data = [] }) {
           ))}
         </AnimatePresence>
       </div>
-
-      {/* دکمه مشاهده بیشتر */}
-      {filteredLogs.length > 5 && (
-        <div className="flex justify-center mt-3">
-          <button
-            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
-            onClick={() => setFilterModalOpen(true)}
-          >
-            مشاهده بیشتر
-          </button>
-        </div>
-      )}
+      <button
+        className="px-3 py-1  border border-[#FF4B4B] text-[#FF4B4B] hover:bg-[#FF4B4B] hover:text-white hover:transition rounded w-full"
+        onClick={() => setFilterModalOpen(true)}
+      >
+        فیلتر / مشاهده همه
+      </button>
 
       {/* Modal */}
       {filterModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg w-full max-w-2xl shadow-lg relative max-h-[80vh] overflow-y-auto">
-            <h2 className="text-lg font-bold mb-4">📜 همه لاگ‌ها (با فیلتر)</h2>
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 p-2 sm:p-4">
+          <div className="bg-white rounded-2xl w-full max-w-5xl shadow-xl relative max-h-[90vh] overflow-hidden flex flex-col">
 
-            {/* فیلترها */}
-            <div className="flex flex-col sm:flex-row gap-3 mb-4">
-              <input
-                type="text"
-                placeholder="مالک"
-                value={filters.owner}
-                onChange={(e) => setFilters(prev => ({ ...prev, owner: e.target.value }))}
-                className="border p-2 rounded flex-1"
-              />
-              <select
-                value={filters.type}
-                onChange={(e) => setFilters(prev => ({ ...prev, type: e.target.value }))}
-                className="border p-2 rounded flex-1"
+            {/* Header */}
+            <div className="flex justify-between items-center p-4 border-b border-gray-200">
+              <h2 className="text-2xl font-bold text-gray-800">📜 همه لاگ‌ها</h2>
+              <button
+                onClick={() => setFilterModalOpen(false)}
+                className="text-gray-500 hover:text-gray-700 p-2 rounded-full transition-colors"
               >
-                <option value="">همه نوع‌ها</option>
-                <option value="Added">ایجاد</option>
-                <option value="Updated">بروزرسانی</option>
-                <option value="Removed">حذف</option>
-              </select>
-              <input
-                type="date"
-                value={filters.date}
-                onChange={(e) => setFilters(prev => ({ ...prev, date: e.target.value }))}
-                className="border p-2 rounded flex-1"
-              />
+                <XMarkIcon className="w-6 h-6" />
+              </button>
             </div>
 
-            {/* لیست لاگ‌ها */}
-            {filteredLogs.length === 0 && (
-              <p className="text-center text-gray-500 py-6">لاگی یافت نشد</p>
-            )}
-            {filteredLogs.map((log, idx) => (
-              <div key={`${log.type}-${log.item.id}-modal-${idx}`} className="mb-4">
-                <TimelineItem log={log} />
+            {/* Filters */}
+            <div className="p-4 flex flex-col sm:flex-row gap-3 bg-gray-50 border-b border-gray-200 rounded-b-2xl">
+              {/* Owner */}
+              <div className="flex flex-col w-full sm:w-1/3">
+                <label className="mb-1 text-sm  text-gray-700">مالک</label>
+                <input
+                  type="text"
+                  placeholder="مالک"
+                  value={filters.owner}
+                  onChange={(e) =>
+                    setFilters((prev) => ({ ...prev, owner: e.target.value }))
+                  }
+                  className="border p-2 h-10 rounded-lg w-full focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                />
               </div>
-            ))}
 
-            {/* بستن */}
-            <div className="mt-4 flex justify-end">
+              {/* Type */}
+              <div className="flex flex-col w-full sm:w-1/3">
+                <label className="mb-1 text-sm text-gray-700">نوع تغییر</label>
+                <div className="relative">
+                  <button
+                    type="button"
+                    onClick={() => setDropdownOpen((prev) => !prev)}
+                    className="w-full flex justify-between items-center rounded-lg border border-gray-300 
+                 bg-white py-2 px-3 text-sm text-gray-700 shadow-sm 
+                 hover:border-gray-400 focus:border-blue-500 focus:ring-2 
+                 focus:ring-blue-500/20 transition-all"
+                  >
+                    {filters.type === ""
+                      ? "همه نوع‌ها"
+                      : filters.type === "اضافه شد"
+                        ? "ایجاد"
+                        : filters.type === "ویرایش شد"
+                          ? "بروزرسانی"
+                          : "حذف"}
+                    <svg
+                      className={`w-5 h-5 text-gray-500 transition-transform duration-200 ${dropdownOpen ? "rotate-180" : ""
+                        }`}
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+
+                  {dropdownOpen && (
+                    <div className="absolute mt-2 w-full rounded-lg bg-white border border-gray-200 shadow-lg z-10 overflow-hidden">
+                      <button
+                        onClick={() => {
+                          setFilters((prev) => ({ ...prev, type: "" }));
+                          setDropdownOpen(false);
+                        }}
+                        className="w-full text-right px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                      >
+                        همه نوع‌ها
+                      </button>
+                      <button
+                        onClick={() => {
+                          setFilters((prev) => ({ ...prev, type: "اضافه شد" }));
+                          setDropdownOpen(false);
+                        }}
+                        className="w-full text-right px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                      >
+                        ایجاد
+                      </button>
+                      <button
+                        onClick={() => {
+                          setFilters((prev) => ({ ...prev, type: "ویرایش شد" }));
+                          setDropdownOpen(false);
+                        }}
+                        className="w-full text-right px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                      >
+                        بروزرسانی
+                      </button>
+                      <button
+                        onClick={() => {
+                          setFilters((prev) => ({ ...prev, type: "حذف شد" }));
+                          setDropdownOpen(false);
+                        }}
+                        className="w-full text-right px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                      >
+                        حذف
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+
+
+              {/* Date */}
+              <div className="flex flex-col w-full sm:w-1/3">
+                <label className="mb-1 text-sm  text-gray-700">تاریخ</label>
+                <DatePicker
+                  value={filters.date}
+                  onChange={(date) =>
+                    setFilters((prev) => ({ ...prev, date }))
+                  }
+                  calendar={persian}
+                  locale={persian_fa}
+                  format="YYYY/MM/DD"
+                  calendarPosition="bottom-right"
+                  portal
+                  inputClass="border p-2 h-10 rounded-lg w-full focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                  className="w-full"
+                />
+              </div>
+            </div>
+
+            {/* Logs List */}
+            <div className="p-4 flex-1 overflow-y-auto">
+              {filteredLogs.length === 0 ? (
+                <p className="text-center text-gray-500 py-6">موردی یافت نشد</p>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  {filteredLogs.map((log, index) => (
+                    <div
+                      key={log.id}
+                      className={`relative p-4 rounded-xl shadow-md  hover:shadow-lg transition-shadow ${log.type === "اضافه شد"
+                        ? "bg-green-50"
+                        : log.type === "حذف شد"
+                          ? "bg-red-50"
+                          : "bg-blue-50"
+                        }`}
+                    >
+                      {/* Mobile timeline line */}
+                      <div className="absolute left-3 top-0 bottom-0 w-px bg-gray-300 sm:hidden"></div>
+                      <TimelineItem log={log} />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Footer */}
+            <div className="p-4 border-t border-gray-200 flex justify-end gap-2">
               <button
-                className="px-4 py-2 bg-gray-300 rounded"
+                className="px-3 py-1 font-bold text-sm border border-[#FF4B4B] text-[#FF4B4B] hover:bg-[#FF4B4B] hover:text-white hover:transition rounded"
+                onClick={() =>
+                  setFilters({ owner: "", type: "", date: null })
+                }
+              >
+                پاک کردن فیلترها
+              </button>
+              <button
+                className="px-3 py-1 font-bold text-sm bg-[#FF4B4B] text-white hover:bg-white hover:border-[#FF4B4B] hover:shadow-md hover:text-[#FF4B4B] hover:transition rounded"
                 onClick={() => setFilterModalOpen(false)}
               >
                 بستن
               </button>
             </div>
-
-            <button
-              className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
-              onClick={() => setFilterModalOpen(false)}
-            >
-              <XMarkIcon className="w-5 h-5" />
-            </button>
           </div>
         </div>
       )}
+
     </div>
   );
 }
