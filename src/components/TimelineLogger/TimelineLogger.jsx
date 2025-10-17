@@ -130,7 +130,7 @@ function TimelineItem({ log }) {
                 <path d="m2.695 14.762-1.262 3.155a.5.5 0 0 0 .65.65l3.155-1.262a4 4 0 0 0 1.343-.886L17.5 5.501a2.121 2.121 0 0 0-3-3L3.58 13.419a4 4 0 0 0-.885 1.343Z" />
               </svg>
           }
-          {log.item.name} {log.type}
+          {log.item.name} 
         </h3>
         <p className="mt-1 text-sm text-gray-600 dark:text-neutral-400">
           {log.item.type} | {log.item.status}
@@ -172,7 +172,7 @@ export function TimelineLogger({ data = [] }) {
   };
 
   return (
-    <div className="p-4 sm:p-4 max-w-3xl mx-auto bg-white border border-gray-200 shadow-sm rounded-xl">
+    <div className="p-1 sm:p-4 max-w-3xl mx-auto bg-white border border-gray-200 shadow-sm rounded-xl">
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2 sm:gap-0">
         <h2 class="flex items-center gap-2 font-bold text-gray-700 mb-3">📌 تایم‌لاین تغییرات اموال</h2>

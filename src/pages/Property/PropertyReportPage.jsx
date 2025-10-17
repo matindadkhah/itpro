@@ -7,21 +7,21 @@ import CustomChart from "../../components/CustomChart/CustomChart";
 import { TimelineLogger } from "../../components/TimelineLogger/TimelineLogger";
 
 // داده نمونه
+
 const mockAssets = [
-  { id: "A002", name: "اداری", type: "کامپیوتر", status: "فعال", department: "اداره انفورماتیک", purchaseDate: "2024-10-05", owner: "علی رضایی" },
-    { id: "A003", name: "اداری", type: "کامپیوتر", status: "غیرفعال", department: "اداره انفورماتیک", purchaseDate: "2024-10-05", owner: "علی رضایی" },
-        { id: "A004", name: "اداری", type: "کامپیوتر", status: "غیرفعال", department: "اداره انفورماتیک", purchaseDate: "2024-10-05", owner: "علی رضایی" },
-          { id: "A005", name: "اداری", type: "کامپیوتر", status: "غیرفعال", department: "اداره انفورماتیک", purchaseDate: "2024-10-05", owner: "علی رضایی" },
-           { id: "A006", name: "اتش نشانی", type: "کامپیوتر", status: "فعال", department: "اداره انفورماتیک", purchaseDate: "2024-10-05", owner: "علی رضایی" },
-
-
-
-
-
-
-
+  { id: "A001", name: "لپ‌تاپ اداری", type: "کامپیوتر", status: "فعال", department: "اداره انفورماتیک", purchaseDate: "1404-01-12", owner: "حمید خسروی" },
+  { id: "A002", name: "کامپیوتر رومیزی", type: "کامپیوتر", status: "فعال", department: "اداره انفورماتیک", purchaseDate: "1404-01-12", owner: "مهدی جعفری" },
+  { id: "A003", name: "پرینتر لیزری", type: "پرینتر", status: "درحال تعمیر", department: "اداره انفورماتیک", purchaseDate: "1403-11-05", owner: "احسان احمدی" },
+  { id: "A004", name: "کامپیوتر اداری قدیمی", type: "کامپیوتر", status: "از رده خارج", department: "اداره انفورماتیک", purchaseDate: "1403-07-22", owner: "متین دادخواه" },
+  { id: "A005", name: "روتر شبکه", type: "تجهیزات شبکه", status: "فعال", department: "اداره انفورماتیک", purchaseDate: "1402-10-30", owner: "آرش اورنگی" },
+  { id: "A006", name: "کامپیوتر رومیزی", type: "کامپیوتر", status: "فعال", department: "اداره انفورماتیک", purchaseDate: "1402-09-15", owner: "ابراهیم کریمی" },
+  { id: "A007", name: "پرینتر جوهرافشان", type: "پرینتر", status: "درحال تعمیر", department: "اداره انفورماتیک", purchaseDate: "1402-06-18", owner: "علی اسحاقیان" },
+  { id: "A008", name: "لپ‌تاپ اداری", type: "کامپیوتر", status: "فعال", department: "اداره انفورماتیک", purchaseDate: "1401-12-05", owner: "حمید خسروی" },
+  { id: "A009", name: "سوئیچ شبکه", type: "تجهیزات شبکه", status: "فعال", department: "اداره انفورماتیک", purchaseDate: "1401-08-22", owner: "متین دادخواه" },
+  { id: "A010", name: "کامپیوتر قدیمی", type: "کامپیوتر", status: "از رده خارج", department: "اداره انفورماتیک", purchaseDate: "1401-05-10", owner: "مهدی جعفری" },
+  { id: "A011", name: "پرینتر لیزری", type: "پرینتر", status: "فعال", department: "اداره انفورماتیک", purchaseDate: "1403-03-15", owner: "احسان احمدی" },
+  { id: "A012", name: "تجهیزات شبکه مرکزی", type: "تجهیزات شبکه", status: "فعال", department: "اداره انفورماتیک", purchaseDate: "1402-11-01", owner: "آرش اورنگی" },
 ];
-
 
 
 const columns = [
@@ -38,7 +38,8 @@ const COLORS = ["#22c55e", "#facc15", "#ef4444"]; // سبز، زرد، قرمز
 
 export default function PropertyReportPage() {
 
-  const [assets, setAssets] = useState(mockAssets)
+  const [allAssets, setAllAssets] = useState(mockAssets); // لیست اصلی
+  const [assets, setAssets] = useState(mockAssets); // لیست برای نمایش
 
   // تابع حذف
   const handleDelete = (row) => {
@@ -70,8 +71,8 @@ export default function PropertyReportPage() {
         {/* ستون سمت راست: سرچ + جدول + چارت */}
         <div className="lg:col-span-3 space-y-6">
           <CustomSearch
-            data={assets}
-            onSearch={(filtered) => setAssets(filtered)}
+            data={allAssets} // حتماً لیست اصلی پاس شود
+            onSearch={(filtered) => setAssets(filtered)} // فقط لیست نمایش
             searchFields={[
               { key: "name", label: "نام", type: "text" },
               { key: "type", label: "نوع", type: "text" },

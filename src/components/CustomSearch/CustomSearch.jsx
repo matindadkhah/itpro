@@ -1,101 +1,192 @@
 import React, { useState } from "react";
-import { FunnelIcon } from "@heroicons/react/24/outline";
+import DatePicker from "react-multi-date-picker";
+import persian from "react-date-object/calendars/persian";
+import persian_fa from "react-date-object/locales/persian_fa";
+
+// Heroicons
+import {
+  FunnelIcon,
+  MagnifyingGlassIcon,
+  CalendarIcon,
+  ChevronDownIcon,
+  ArrowPathIcon,
+} from "@heroicons/react/24/outline";
 
 export default function CustomSearch({ data = [], searchFields = [], onSearch }) {
   const [filters, setFilters] = useState({});
+  const [dropdownOpen, setDropdownOpen] = useState({});
 
-  // تغییر مقادیر هر فیلتر
+  // تغییر مقدار فیلتر
   const handleChange = (key, value) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
   };
 
-  // اجرای جست‌وجو
+  // اعمال فیلتر
   const handleSearch = () => {
+    const noFilters = Object.entries(filters).every(([key, value]) => {
+      if (!value) return true;
+      if (key.toLowerCase().includes("date")) return !value?.gregorian;
+      return false;
+    });
+
+    if (noFilters) {
+      onSearch(data);
+      return;
+    }
+
     const filteredData = data.filter((item) =>
       Object.entries(filters).every(([key, value]) => {
-        if (!value) return true; // اگر فیلتر خالی بود رد کن
-
+        if (!value) return true;
+        if (key.toLowerCase().includes("date")) {
+          return item[key]?.includes(value.gregorian);
+        }
         const itemValue = item[key]?.toString().toLowerCase();
         const filterValue = value.toString().toLowerCase();
-
-        // برای فیلتر تاریخ، فقط برابر بودن کافی است
-        if (key.toLowerCase().includes("date")) {
-          return item[key]?.includes(value);
-        }
-
-        return itemValue.includes(filterValue);
+        return itemValue?.includes(filterValue);
       })
     );
 
     onSearch(filteredData);
   };
 
-  // ریست همه فیلترها
+  // ریست
   const handleReset = () => {
     setFilters({});
     onSearch(data);
   };
 
   return (
-    <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 mb-4">
-      <h2 className="flex items-center gap-2 font-bold text-gray-700 mb-3">
-        <FunnelIcon className="h-5 w-5 text-blue-600" />
+    <div className="bg-white p-5 rounded-xl shadow-md border border-gray-200 mb-6">
+      {/* عنوان */}
+      <h2 className="flex items-center gap-2 font-bold text-gray-800 mb-5 text-lg">
+        <FunnelIcon className="w-5 h-5 text-red-500" />
         جست‌وجوی پیشرفته
       </h2>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mb-4">
+      {/* Grid فیلدها */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6">
         {searchFields.map((field) => (
-          <div key={field.key}>
-            <label className="block text-sm text-gray-600 mb-1">{field.label}</label>
+          <div key={field.key} className="flex flex-col">
+            <label className="block text-sm font-medium text-gray-600 mb-2">
+              {field.label}
+            </label>
 
+            {/* Input متن */}
             {field.type === "text" && (
-              <input
-                type="text"
-                value={filters[field.key] || ""}
-                onChange={(e) => handleChange(field.key, e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500"
-              />
+              <div className="relative">
+                <input
+                  type="text"
+                  value={filters[field.key] || ""}
+                  onChange={(e) => handleChange(field.key, e.target.value)}
+                  placeholder={`جستجو در ${field.label}`}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm pr-9 focus:ring-2 focus:ring-red-400 focus:outline-none"
+                />
+                <MagnifyingGlassIcon className="w-4 h-4 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2" />
+              </div>
             )}
 
+            {/* Select */}
             {field.type === "select" && (
-              <select
-                value={filters[field.key] || ""}
-                onChange={(e) => handleChange(field.key, e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">انتخاب کنید...</option>
-                {field.options.map((opt, i) => (
-                  <option key={i} value={opt}>
-                    {opt}
-                  </option>
-                ))}
-              </select>
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() =>
+                    setDropdownOpen((prev) => ({
+                      ...prev,
+                      [field.key]: !prev[field.key],
+                    }))
+                  }
+                  className="w-full flex justify-between items-center rounded-lg border border-gray-300 
+                  bg-white py-2 px-3 text-sm text-gray-700 shadow-sm 
+                  hover:border-gray-400 focus:border-red-400 focus:ring-2 
+                  focus:ring-red-300 transition-all"
+                >
+                  {filters[field.key] === "" || !filters[field.key]
+                    ? "همه"
+                    : filters[field.key]}
+                  <ChevronDownIcon
+                    className={`w-5 h-5 text-gray-500 transition-transform duration-200 ${
+                      dropdownOpen?.[field.key] ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+
+                {dropdownOpen?.[field.key] && (
+                  <div className="absolute mt-2 w-full rounded-lg bg-white border border-gray-200 shadow-lg z-10 overflow-hidden">
+                    <button
+                      onClick={() => {
+                        setFilters((prev) => ({ ...prev, [field.key]: "" }));
+                        setDropdownOpen((prev) => ({ ...prev, [field.key]: false }));
+                      }}
+                      className="w-full text-right px-4 py-2 text-sm text-gray-700 hover:bg-red-50 hover:text-red-500"
+                    >
+                      همه
+                    </button>
+                    {field.options.map((opt, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => {
+                          setFilters((prev) => ({ ...prev, [field.key]: opt }));
+                          setDropdownOpen((prev) => ({ ...prev, [field.key]: false }));
+                        }}
+                        className="w-full text-right px-4 py-2 text-sm text-gray-700 hover:bg-red-50 hover:text-red-500"
+                      >
+                        {opt}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
             )}
 
+            {/* تاریخ */}
             {field.type === "date" && (
-              <input
-                type="date"
-                value={filters[field.key] || ""}
-                onChange={(e) => handleChange(field.key, e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500"
-              />
+              <div className="relative">
+                <DatePicker
+                  value={filters[field.key]?.persian || ""}
+                  onChange={(date) => {
+                    if (!date) {
+                      handleChange(field.key, null);
+                      return;
+                    }
+                    const persianDate = date.format("YYYY/MM/DD");
+                    const gregorianDate = date.toDate().toISOString().split("T")[0];
+                    handleChange(field.key, {
+                      persian: persianDate,
+                      gregorian: gregorianDate,
+                    });
+                  }}
+                  calendar={persian}
+                  locale={persian_fa}
+                  format="YYYY/MM/DD"
+                  calendarPosition="bottom-right"
+                  portal
+                  inputClass="border p-2 h-10 rounded-lg w-full focus:ring-2 focus:ring-red-400 focus:outline-none text-sm pr-9"
+                />
+                <CalendarIcon className="w-4 h-4 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+              </div>
             )}
           </div>
         ))}
       </div>
 
-      <div className="flex justify-end gap-2">
+      {/* دکمه‌ها */}
+      <div className="flex flex-col sm:flex-row justify-end gap-3">
         <button
           onClick={handleReset}
-          className="px-4 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100 transition"
+          className="flex items-center justify-center gap-2 px-4 py-2 font-bold text-sm rounded-lg border border-red-500 text-red-500 
+          hover:bg-red-50 hover:shadow transition"
         >
-          ریست
+          <ArrowPathIcon className="w-4 h-4" />
+          پاک کردن فیلترها
         </button>
         <button
           onClick={handleSearch}
-          className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition"
+          className="flex items-center justify-center gap-2 px-4 py-2 font-bold text-sm rounded-lg bg-red-500 text-white 
+          hover:bg-red-600 hover:shadow transition"
         >
-          جست‌وجو
+          <MagnifyingGlassIcon className="w-4 h-4" />
+          اعمال فیلتر
         </button>
       </div>
     </div>
