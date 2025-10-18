@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { XMarkIcon } from "@heroicons/react/24/solid";
+import { TagIcon } from "@heroicons/react/24/outline";
 import DatePicker, { Calendar } from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
@@ -130,7 +131,7 @@ function TimelineItem({ log }) {
                 <path d="m2.695 14.762-1.262 3.155a.5.5 0 0 0 .65.65l3.155-1.262a4 4 0 0 0 1.343-.886L17.5 5.501a2.121 2.121 0 0 0-3-3L3.58 13.419a4 4 0 0 0-.885 1.343Z" />
               </svg>
           }
-          {log.item.name} 
+          {log.item.name}
         </h3>
         <p className="mt-1 text-sm text-gray-600 dark:text-neutral-400">
           {log.item.type} | {log.item.status}
@@ -175,7 +176,11 @@ export function TimelineLogger({ data = [] }) {
     <div className="p-1 sm:p-4 max-w-3xl mx-auto bg-white border border-gray-200 shadow-sm rounded-xl">
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2 sm:gap-0">
-        <h2 class="flex items-center gap-2 font-bold text-gray-700 mb-3">📌 تایم‌لاین تغییرات اموال</h2>
+        <h2 class="flex items-center gap-2 font-bold text-gray-800 mb-5 text-lg">
+          <TagIcon className="w-5 h-5 text-red-500" />
+
+
+          تایم‌لاین تغییرات اموال</h2>
 
       </div>
 

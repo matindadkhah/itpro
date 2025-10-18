@@ -3,8 +3,8 @@ import React, { useState } from "react";
 import CustomTable from "../../components/CustomTable/CustomTable";
 import { showToast } from "../../components/Toastify/ShowToast";
 import CustomSearch from "../../components/CustomSearch/CustomSearch";
-import CustomChart from "../../components/CustomChart/CustomChart";
 import { TimelineLogger } from "../../components/TimelineLogger/TimelineLogger";
+import KPICard from "../../components/KPICard/KPICard";
 
 // داده نمونه
 
@@ -21,6 +21,7 @@ const mockAssets = [
   { id: "A010", name: "کامپیوتر قدیمی", type: "کامپیوتر", status: "از رده خارج", department: "اداره انفورماتیک", purchaseDate: "1401-05-10", owner: "مهدی جعفری" },
   { id: "A011", name: "پرینتر لیزری", type: "پرینتر", status: "فعال", department: "اداره انفورماتیک", purchaseDate: "1403-03-15", owner: "احسان احمدی" },
   { id: "A012", name: "تجهیزات شبکه مرکزی", type: "تجهیزات شبکه", status: "فعال", department: "اداره انفورماتیک", purchaseDate: "1402-11-01", owner: "آرش اورنگی" },
+
 ];
 
 
@@ -59,7 +60,7 @@ export default function PropertyReportPage() {
     <div className="p-6 bg-gray-50 min-h-screen grid gap-5">
       {/* Header */}
       <div className="flex justify-between items-center mb-4">
-        <h1 className="text-xl font-bold">گزارش‌گیری اموال</h1>
+        <h1 className="flex items-center gap-2 font-bold text-gray-800 mb-5 text-xl">گزارش‌گیری اموال</h1>
 
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 p-6">
@@ -70,6 +71,7 @@ export default function PropertyReportPage() {
 
         {/* ستون سمت راست: سرچ + جدول + چارت */}
         <div className="lg:col-span-3 space-y-6">
+          <KPICard data={mockAssets} />
           <CustomSearch
             data={allAssets} // حتماً لیست اصلی پاس شود
             onSearch={(filtered) => setAssets(filtered)} // فقط لیست نمایش
@@ -88,7 +90,8 @@ export default function PropertyReportPage() {
             showPagination={true}
           >
           </CustomTable>
-          <CustomChart data={mockAssets} />
+
+
         </div>
       </div>
 
