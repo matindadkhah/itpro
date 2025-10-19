@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { XMarkIcon } from "@heroicons/react/24/solid";
-import { TagIcon } from "@heroicons/react/24/outline";
+import { TagIcon, ArrowPathIcon, XMarkIcon, EyeIcon } from "@heroicons/react/24/outline";
 import DatePicker, { Calendar } from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
@@ -206,9 +205,10 @@ export function TimelineLogger({ data = [] }) {
         </AnimatePresence>
       </div>
       <button
-        className="px-3 py-1  border border-[#FF4B4B] text-[#FF4B4B] hover:bg-[#FF4B4B] hover:text-white hover:transition rounded w-full"
-        onClick={() => setFilterModalOpen(true)}
+        className="flex items-center justify-center gap-2 px-4 py-2 font-bold text-sm rounded-lg bg-red-500 text-white 
+          hover:bg-red-600 hover:shadow transition w-full"        onClick={() => setFilterModalOpen(true)}
       >
+        <EyeIcon className="w-4 h-4"  />
         فیلتر / مشاهده همه
       </button>
 
@@ -240,7 +240,8 @@ export function TimelineLogger({ data = [] }) {
                   onChange={(e) =>
                     setFilters((prev) => ({ ...prev, owner: e.target.value }))
                   }
-                  className="border p-2 h-10 rounded-lg w-full focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                  className="border p-2 h-10 rounded-lg w-full focus:ring-2  focus:ring-red-400 focus:outline-none
+"
                 />
               </div>
 
@@ -253,7 +254,7 @@ export function TimelineLogger({ data = [] }) {
                     onClick={() => setDropdownOpen((prev) => !prev)}
                     className="w-full flex justify-between items-center rounded-lg border border-gray-300 
                  bg-white py-2 px-3 text-sm text-gray-700 shadow-sm 
-                 hover:border-gray-400 focus:border-blue-500 focus:ring-2 
+                   focus:ring-red-400 focus:outline-none focus:ring-2 
                  focus:ring-blue-500/20 transition-all"
                   >
                     {filters.type === ""
@@ -282,8 +283,7 @@ export function TimelineLogger({ data = [] }) {
                           setFilters((prev) => ({ ...prev, type: "" }));
                           setDropdownOpen(false);
                         }}
-                        className="w-full text-right px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600"
-                      >
+                        class="w-full text-right px-4 py-2 text-sm text-gray-700 hover:bg-red-50 hover:text-red-500">
                         همه نوع‌ها
                       </button>
                       <button
@@ -291,8 +291,7 @@ export function TimelineLogger({ data = [] }) {
                           setFilters((prev) => ({ ...prev, type: "اضافه شد" }));
                           setDropdownOpen(false);
                         }}
-                        className="w-full text-right px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600"
-                      >
+                        class="w-full text-right px-4 py-2 text-sm text-gray-700 hover:bg-red-50 hover:text-red-500">
                         ایجاد
                       </button>
                       <button
@@ -300,8 +299,7 @@ export function TimelineLogger({ data = [] }) {
                           setFilters((prev) => ({ ...prev, type: "ویرایش شد" }));
                           setDropdownOpen(false);
                         }}
-                        className="w-full text-right px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600"
-                      >
+                        class="w-full text-right px-4 py-2 text-sm text-gray-700 hover:bg-red-50 hover:text-red-500">
                         بروزرسانی
                       </button>
                       <button
@@ -309,8 +307,7 @@ export function TimelineLogger({ data = [] }) {
                           setFilters((prev) => ({ ...prev, type: "حذف شد" }));
                           setDropdownOpen(false);
                         }}
-                        className="w-full text-right px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600"
-                      >
+                        class="w-full text-right px-4 py-2 text-sm text-gray-700 hover:bg-red-50 hover:text-red-500">
                         حذف
                       </button>
                     </div>
@@ -333,7 +330,7 @@ export function TimelineLogger({ data = [] }) {
                   format="YYYY/MM/DD"
                   calendarPosition="bottom-right"
                   portal
-                  inputClass="border p-2 h-10 rounded-lg w-full focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                  inputClass="border p-2 h-10 rounded-lg w-full focus:ring-2  focus:ring-red-400 focus:outline-none"
                   className="w-full"
                 />
               </div>
@@ -365,19 +362,23 @@ export function TimelineLogger({ data = [] }) {
             </div>
 
             {/* Footer */}
-            <div className="p-4 border-t border-gray-200 flex justify-end gap-2">
+            <div className="flex flex-col sm:flex-row justify-end gap-3 p-4 bg-gray-50">
               <button
-                className="px-3 py-1 font-bold text-sm border border-[#FF4B4B] text-[#FF4B4B] hover:bg-[#FF4B4B] hover:text-white hover:transition rounded"
                 onClick={() =>
                   setFilters({ owner: "", type: "", date: null })
                 }
+                className="flex items-center justify-center gap-2 px-4 py-2 font-bold text-sm rounded-lg border border-red-500 text-red-500 
+          hover:bg-red-50 hover:shadow transition"
               >
+                <ArrowPathIcon className="w-4 h-4" />
                 پاک کردن فیلترها
               </button>
               <button
-                className="px-3 py-1 font-bold text-sm bg-[#FF4B4B] text-white hover:bg-white hover:border-[#FF4B4B] hover:shadow-md hover:text-[#FF4B4B] hover:transition rounded"
                 onClick={() => setFilterModalOpen(false)}
+                className="flex items-center justify-center gap-2 px-4 py-2 font-bold text-sm rounded-lg bg-red-500 text-white 
+          hover:bg-red-600 hover:shadow transition"
               >
+                <XMarkIcon className="w-4 h-4" />
                 بستن
               </button>
             </div>
@@ -388,3 +389,6 @@ export function TimelineLogger({ data = [] }) {
     </div>
   );
 }
+
+
+

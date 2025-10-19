@@ -82,11 +82,13 @@ const CustomTable = ({
                 key={row.id || rowIndex}
                 className="bg-white border-b hover:bg-red-50 transition"
               >
+                
                 {columns.map((col) => (
                   <td
                     key={col.key}
                     className="px-6 py-4 whitespace-nowrap text-right"
                   >
+                    
                     {row[col.key]}
                   </td>
                 ))}

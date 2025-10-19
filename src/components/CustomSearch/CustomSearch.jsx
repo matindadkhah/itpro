@@ -141,8 +141,9 @@ export default function CustomSearch({ data = [], searchFields = [], onSearch })
 
             {/* تاریخ */}
             {field.type === "date" && (
-              <div className="relative">
-                <DatePicker
+              <div className="relative" >
+                <DatePicker 
+                inputMode="block"
                   value={filters[field.key]?.persian || ""}
                   onChange={(date) => {
                     if (!date) {
@@ -161,7 +162,8 @@ export default function CustomSearch({ data = [], searchFields = [], onSearch })
                   format="YYYY/MM/DD"
                   calendarPosition="bottom-right"
                   portal
-                  inputClass="border p-2 h-10 rounded-lg w-full focus:ring-2 focus:ring-red-400 focus:outline-none text-sm pr-9"
+                  inputClass="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm pr-9 focus:ring-2 focus:ring-red-400 focus:outline-none block"
+             
                 />
                 <CalendarIcon className="w-4 h-4 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
               </div>

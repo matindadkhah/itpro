@@ -14,6 +14,9 @@ import {
     ComputerDesktopIcon,
     PrinterIcon,
     ServerStackIcon,
+    ArrowTrendingUpIcon
+
+
 
 } from "@heroicons/react/24/outline";
 
@@ -25,9 +28,9 @@ const toPersianNumber = (num) =>
 
 // آیکون بر اساس نوع دارایی
 const typeIcons = {
-    "کامپیوتر": <ComputerDesktopIcon className="w-10 h-10 text-[#FF4B4B]" />,
-    "پرینتر": <PrinterIcon className="w-10 h-10 text-[#FF4B4B]" />,
-    "تجهیزات شبکه": <ServerStackIcon className="w-10 h-10 text-[#FF4B4B]" />,
+    "کامپیوتر": <ComputerDesktopIcon className="w-10 h-10 text-[#FF4B4B] bg-[#FF4B4B]/5 rounded-full p-2" />,
+    "پرینتر": <PrinterIcon className="w-10 h-10 text-[#FF4B4B]  bg-[#FF4B4B]/5 rounded-full p-2" />,
+    "تجهیزات شبکه": <ServerStackIcon className="w-10 h-10 text-[#FF4B4B]  bg-[#FF4B4B]/5 rounded-full p-2" />,
 };
 
 export default function KPICard({ data }) {
@@ -45,74 +48,79 @@ export default function KPICard({ data }) {
     }, [data]);
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-white p-5 rounded-xl shadow-md border border-gray-200">
-            {Object.entries(grouped).map(([type, { count, yearly }]) => {
-                const years = Object.keys(yearly).sort();
-                const chartData = {
-                    labels: years,
-                    datasets: [
-                        {
-                            label: "تعداد",
-                            data: years.map((y) => yearly[y]),
-                            borderColor: "#FF4B4B",
-                            backgroundColor: (context) => {
-                                const ctx = context.chart.ctx;
-                                const gradient = ctx.createLinearGradient(0, 0, 0, 60);
-                                gradient.addColorStop(0, "rgba(255,75,75,0.4)");
-                                gradient.addColorStop(1, "rgba(255,75,75,0)");
-                                return gradient;
+        <div >
+            <h2 class="flex items-center gap-2 font-bold text-gray-800 mb-5 text-lg">
+                <ArrowTrendingUpIcon className="w-5 h-5 text-red-500" />
+                گزارش کلی</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6  rounded-xl">
+                {Object.entries(grouped).map(([type, { count, yearly }]) => {
+                    const years = Object.keys(yearly).sort();
+                    const chartData = {
+                        labels: years,
+                        datasets: [
+                            {
+                                label: "تعداد",
+                                data: years.map((y) => yearly[y]),
+                                borderColor: "#FF4B4B",
+                                backgroundColor: (context) => {
+                                    const ctx = context.chart.ctx;
+                                    const gradient = ctx.createLinearGradient(0, 0, 0, 60);
+                                    gradient.addColorStop(0, "rgba(255,75,75,0.4)");
+                                    gradient.addColorStop(1, "rgba(255,75,75,0)");
+                                    return gradient;
+                                },
+                                tension: 0.4,
+                                fill: true,
+                                pointRadius: 0,       // ✅ نقاط حذف شدند
+                                pointHoverRadius: 0,  // ✅ نقاط هنگام هاور حذف شدند
                             },
-                            tension: 0.4,
-                            fill: true,
-                            pointRadius: 0,       // ✅ نقاط حذف شدند
-                            pointHoverRadius: 0,  // ✅ نقاط هنگام هاور حذف شدند
-                        },
-                    ],
-                };
+                        ],
+                    };
 
 
-                return (
-                    
-                    <div
-                        key={type}
-                        className="flex flex-col bg-[#FF4B4B]/5 md:flex-row items-center justify-between py-5 px-4 bg-white border border-gray-100 rounded-2xl shadow-md hover:shadow-xl transition-all"
-                    >
-                        {/* بخش اطلاعات و آیکون */}
-                       
-                        <div className="flex flex-col md:flex-row items-center gap-4 md:gap-6">
-                            {typeIcons[type]}
-                            <div>
-                                <h2 className="text-lg font-semibold text-gray-600">{type}</h2>
-                                <p className="text-gray-500 mt-1 text-sm">
-                                    تعداد کل:{" "}
-                                    <span className="font-extrabold text-lg text-[#FF4B4B]">
-                                        {toPersianNumber(count)}
-                                    </span>
-                                </p>
+                    return (
+
+                        <div
+                            key={type}
+                            className="flex flex-col bg-[#FF4B4B]/5 md:flex-row items-center justify-between py-5 px-4 bg-white border border-gray-100 rounded-lg shadow-md hover:shadow-xl transition-all"
+                        >
+                            {/* بخش اطلاعات و آیکون */}
+
+                            <div className="flex flex-col md:flex-row items-center gap-4 md:gap-6">
+                                {typeIcons[type]}
+                                <div>
+                                    <h2 className="text-base font-semibold text-gray-600">{type}</h2>
+                                    <p className="text-gray-500 mt-1 text-sm">
+                                        تعداد کل : {" "}
+                                        <span className="font-extrabold text-base text-[#FF4B4B]">
+                                            {toPersianNumber(count)}
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* نمودار کوچک */}
+                            <div className="w-full md:w-28 h-16 mt-3 md:mt-0">
+                                <Line
+                                    data={chartData}
+                                    options={{
+                                        plugins: { legend: { display: false }, tooltip: { enabled: false } },
+                                        scales: {
+                                            x: { display: false },
+                                            y: { display: false },
+                                        },
+                                        elements: {
+                                            line: { borderWidth: 2 },
+                                        },
+                                        responsive: true,
+                                        maintainAspectRatio: false,
+                                    }}
+                                />
                             </div>
                         </div>
-
-                        {/* نمودار کوچک */}
-                        <div className="w-full md:w-28 h-16 mt-3 md:mt-0">
-                            <Line
-                                data={chartData}
-                                options={{
-                                    plugins: { legend: { display: false }, tooltip: { enabled: false } },
-                                    scales: {
-                                        x: { display: false },
-                                        y: { display: false },
-                                    },
-                                    elements: {
-                                        line: { borderWidth: 2 },
-                                    },
-                                    responsive: true,
-                                    maintainAspectRatio: false,
-                                }}
-                            />
-                        </div>
-                    </div>
-                );
-            })}
+                    );
+                })}
+            </div>
         </div>
     );
 }
