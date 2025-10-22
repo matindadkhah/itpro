@@ -15,6 +15,7 @@ import {
   ChevronDoubleRightIcon,
 } from "@heroicons/react/24/outline";
 import MenuItems from './MenuItem';
+import Breadcrumb from '../../components/BreadCrumb/BreadCrumb';
 
 
 
@@ -41,7 +42,7 @@ const ItProPage = () => {
   return (
     <>
 
-      <div className="flex h-screen font-shabnam">
+      <div className="flex h-screen font-shabnam" dir='rtl'>
         {/* Sidebar */}
 
           {/* Header */}
@@ -58,6 +59,7 @@ const ItProPage = () => {
             <Navbar />
           {/* Page Content */}
           <main className="flex-1 p-4 bg-gray-200">
+            <Breadcrumb/>
             <Outlet />
           </main>
         </div>
