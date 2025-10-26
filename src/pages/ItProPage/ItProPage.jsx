@@ -1,74 +1,22 @@
-import { useEffect, useState } from 'react'
-import React from 'react'
-import Navbar from './Navbar'
-import { Link, Outlet } from 'react-router-dom';
-import {
-  ArchiveBoxIcon,
-  BellAlertIcon,
-  ChartBarIcon,
-  WrenchIcon,
-  BookOpenIcon,
-  GlobeAltIcon,
-  ChevronDownIcon,
-  ChevronUpIcon,
-  ChevronDoubleLeftIcon,
-  ChevronDoubleRightIcon,
-} from "@heroicons/react/24/outline";
-import MenuItems from './MenuItem';
-import Breadcrumb from '../../components/BreadCrumb/BreadCrumb';
+import React from "react";
+import Sidebar from "./Sidebar";
+import Header from "./Header";
+import { Outlet } from "react-router-dom";
+import BreadCrumb from "../../components/BreadCrumb/BreadCrumb"
 
-
-
-
-
-
-
-const ItProPage = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [sidebarMinimized, setSidebarMinimized] = useState(false);
-  const [openMenus, setOpenMenus] = useState({});
-  const [collapsed, setCollapsed] = useState(false);
-
-  const toggleMenu = (title) => {
-    setOpenMenus((prev) => ({
-      ...prev,
-      [title]: !prev[title],
-    }));
-  };
-
-
- 
-
+const Layout = () => {
   return (
-    <>
-
-      <div className="flex h-screen font-shabnam" dir='rtl'>
-        {/* Sidebar */}
-
-          {/* Header */}
-
-
-
-          {/* Navigation */}
-          <MenuItems />
- 
-
-        {/* Main Content */}
-        <div className="flex-1 flex flex-col transition-all duration-300">
-          {/* Navbar */}
-            <Navbar />
-          {/* Page Content */}
-          <main className="flex-1 p-4 bg-gray-200">
-            <Breadcrumb/>
-            <Outlet />
-          </main>
-        </div>
+    <div className="flex font-shabnam bg-gray-200 " dir="rtl">
+      <Sidebar />
+      <div className="flex flex-col flex-1 transition-all duration-300">
+        <Header />
+        <main className="flex-1 p-6  ">
+          <BreadCrumb />
+          <Outlet />
+        </main>
       </div>
+    </div>
+  );
+};
 
-
-    </>
-  )
-}
-
-export default ItProPage
-
+export default Layout;
