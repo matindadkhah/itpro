@@ -62,6 +62,7 @@ export default function PropertyReportPage() {
       <div className="flex justify-between items-center mb-4">
         <h1 className="flex items-center gap-2 font-bold text-gray-800 mb-5 text-xl">گزارش‌گیری اموال</h1>
 
+
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 p-6">
         {/* ستون سمت چپ: تایم لاین */}
