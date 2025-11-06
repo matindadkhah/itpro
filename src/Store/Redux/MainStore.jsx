@@ -1,13 +1,13 @@
-import { legacy_createStore as createStore , combineReducers } from "redux";
-import PropertyReducer from "../Reducers/PropertyReducer";
+import { legacy_createStore as createStore, combineReducers } from "redux";
 import searchReducer from "../Reducers/searchReducer";
+import authReducer from "../Reducers/authReducer/";
 
 // اگر چند reducer داری، با combineReducers ادغامشون کن
 
 
 const rootReducer = combineReducers({
-  property: PropertyReducer ,
-  search : searchReducer,
+  search: searchReducer,
+  auth: authReducer
 });
 
 const mainstore = createStore(rootReducer);

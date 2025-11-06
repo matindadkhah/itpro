@@ -2,7 +2,7 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import ItProPage from "./pages/ItProPage/ItProPage";
+import Layout from "./pages/ItProPage/Layout";
 import PropertyListPage from "./pages/Property/PropertyListPage";
 import PropertyReportPage from "./pages/Property/PropertyReportPage";
 import NewWarningPage from "./pages/Emails and Warnings/NewWarningPage"
@@ -18,6 +18,7 @@ import TrainingUploadPage from "./pages/Training/TrainingUploadPage"
 import ServersPage from "./pages/NetworkStatus/ServersPage"
 import GatewaysPage from "./pages/NetworkStatus/GatewaysPage"
 import NetworkStatusSetting from "./pages/NetworkStatus/NetworkStatusSetting"
+import LoginPage from "./pages/LoginPage/LoginPage";
 
 
 
@@ -25,11 +26,12 @@ import NetworkStatusSetting from "./pages/NetworkStatus/NetworkStatusSetting"
 const router = createBrowserRouter([
   {
     path: "/",
-    element:<ItProPage></ItProPage>,
+    element: <Layout></Layout>,
     children: [
+      { path: "login", element: <LoginPage />, handle: { crumb: "صفحه ورود" } },
       { path: "property/list", element: <PropertyListPage />, handle: { crumb: "لیست اموال" } },
-      { path: "property/report", element:<PropertyReportPage/>, handle: { crumb: "گزارش گیری لیست اموال" } },
-      { path: "alerts/new", element: <NewWarningPage/>, handle: { crumb: "هشدار جدید" } },
+      { path: "property/report", element: <PropertyReportPage />, handle: { crumb: "گزارش گیری لیست اموال" } },
+      { path: "alerts/new", element: <NewWarningPage />, handle: { crumb: "هشدار جدید" } },
       { path: "alerts/list", element: <WarningListpage />, handle: { crumb: "لیست هشدارها" } },
       { path: "monitoring/daily", element: <DailyMonitoringPage />, handle: { crumb: "مانیتورینگ روزانه" } },
       { path: "monitoring/chart", element: <ChartPage />, handle: { crumb: "چارت" } },

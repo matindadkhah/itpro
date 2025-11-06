@@ -12,14 +12,30 @@ import {
   WrenchScrewdriverIcon,
   ArrowRightStartOnRectangleIcon
 } from "@heroicons/react/24/outline";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { icon } from "leaflet";
+import { useSelector } from "react-redux";
+import { useAuth } from "../../Hooks/useAuth";
 
 const Header = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [openMenus, setOpenMenus] = useState(false);
+  const { user, logout } = useAuth();
+  const navigate = useNavigate()
+
+
+
+  const handleLogout = async () => {
+    try {
+      await logout(); // اجرای logout از useAuth
+      navigate("/login"); // هدایت به صفحه لاگین پس از logout
+    } catch (error) {
+      console.error("Logout error", error);
+    }
+  };
+
 
 
   const notifications = [
@@ -91,8 +107,8 @@ const Header = () => {
 
   const profileOptions = [
     { title: "پروفایل من", path: "/profile", icon: <UserIcon className="size-5 text-red-600" /> },
-    { title: "تنظیمات", path: "/settings", icon:  <WrenchScrewdriverIcon className="size-5 text-red-600" /> },
-    { title: "خروج", path: "/logout", icon: <ArrowRightStartOnRectangleIcon className="size-5 text-red-600" /> },
+    { title: "تنظیمات", path: "/settings", icon: <WrenchScrewdriverIcon className="size-5 text-red-600" /> },
+    { title: "خروج", path: "/logout", icon: <ArrowRightStartOnRectangleIcon className="size-5 text-red-600" />, onClick: () => handleLogout() },
   ];
   const toggleSubmenu = (title) => { setOpenMenus((prev) => ({ ...prev, [title]: !prev[title] })); };
 
@@ -129,7 +145,7 @@ const Header = () => {
                 alt="Avatar"
               />
               <span className="text-gray-600 font-medium truncate max-w-30">
-                متین دادخواه تهرانی
+                {user.fName + " " + user.lName}
               </span>
               <svg
                 className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${profileOpen ? "rotate-180" : ""
@@ -150,7 +166,7 @@ const Header = () => {
                   <Link
                     key={i}
                     to={opt.path}
-                    onClick={() => setProfileOpen(false)}
+                    onClick={opt.onClick || (() => setProfileOpen(false))}
                     className="flex items-center gap-x-3.5 py-2 px-3  text-sm text-gray-800 hover:bg-red-50 transition"
                   >
                     {opt.icon}
@@ -250,3 +266,6 @@ const Header = () => {
 };
 
 export default Header;
+
+
+
