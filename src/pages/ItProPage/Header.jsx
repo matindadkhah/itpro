@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import {
-  ChevronDownIcon, ChevronUpIcon, Bars3Icon, ArchiveBoxIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+  Bars3Icon,
+  ArchiveBoxIcon,
   BellAlertIcon,
   ChartBarIcon,
   WrenchIcon,
@@ -10,11 +13,9 @@ import {
   XMarkIcon,
   UserIcon,
   WrenchScrewdriverIcon,
-  ArrowRightStartOnRectangleIcon
+  ArrowRightStartOnRectangleIcon,
 } from "@heroicons/react/24/outline";
 import { Link, useNavigate } from "react-router-dom";
-import { icon } from "leaflet";
-import { useSelector } from "react-redux";
 import { useAuth } from "../../Hooks/useAuth";
 
 const Header = () => {
@@ -23,9 +24,7 @@ const Header = () => {
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [openMenus, setOpenMenus] = useState(false);
   const { user, logout } = useAuth();
-  const navigate = useNavigate()
-
-
+  const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
@@ -36,13 +35,7 @@ const Header = () => {
     }
   };
 
-
-
-  const notifications = [
-    "اعلان اول",
-    "اعلان دوم",
-    "اعلان سوم",
-  ];
+  const notifications = ["اعلان اول", "اعلان دوم", "اعلان سوم"];
 
   const menuItems = [
     {
@@ -104,13 +97,27 @@ const Header = () => {
     },
   ];
 
-
   const profileOptions = [
-    { title: "پروفایل من", path: "/profile", icon: <UserIcon className="size-5 text-red-600" /> },
-    { title: "تنظیمات", path: "/settings", icon: <WrenchScrewdriverIcon className="size-5 text-red-600" /> },
-    { title: "خروج", path: "/logout", icon: <ArrowRightStartOnRectangleIcon className="size-5 text-red-600" />, onClick: () => handleLogout() },
+    {
+      title: "پروفایل من",
+      path: "/profile",
+      icon: <UserIcon className="size-5 text-red-600" />,
+    },
+    {
+      title: "تنظیمات",
+      path: "/settings",
+      icon: <WrenchScrewdriverIcon className="size-5 text-red-600" />,
+    },
+    {
+      title: "خروج",
+      path: "/logout",
+      icon: <ArrowRightStartOnRectangleIcon className="size-5 text-red-600" />,
+      onClick: () => handleLogout(),
+    },
   ];
-  const toggleSubmenu = (title) => { setOpenMenus((prev) => ({ ...prev, [title]: !prev[title] })); };
+  const toggleSubmenu = (title) => {
+    setOpenMenus((prev) => ({ ...prev, [title]: !prev[title] }));
+  };
 
   return (
     <>
@@ -148,15 +155,20 @@ const Header = () => {
                 {user.fName + " " + user.lName}
               </span>
               <svg
-                className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${profileOpen ? "rotate-180" : ""
-                  }`}
+                className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${
+                  profileOpen ? "rotate-180" : ""
+                }`}
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
                 viewBox="0 0 24 24"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 9l6 6 6-6" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 9l6 6 6-6"
+                />
               </svg>
             </button>
 
@@ -218,7 +230,9 @@ const Header = () => {
           ></div>
           <aside className="fixed top-0 right-0 z-50 h-full bg-white border-l border-gray-200 w-64 transition-transform duration-300">
             <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 gap-2">
-              <h1 className="text-sm font-bold text-red-600">سازمان آتش نشانی و خدمات ایمنی شهرداری اصفهان</h1>
+              <h1 className="text-sm font-bold text-red-600">
+                سازمان آتش نشانی و خدمات ایمنی شهرداری اصفهان
+              </h1>
               <button onClick={() => setMobileOpen(false)}>
                 <XMarkIcon className="w-6 h-6 text-red-600" />
               </button>
@@ -266,6 +280,3 @@ const Header = () => {
 };
 
 export default Header;
-
-
-
