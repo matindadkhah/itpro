@@ -31,6 +31,11 @@ const CustomTable = ({
   const endIndex = startIndex + itemsPerPage;
   const currentData = tableData.slice(startIndex, endIndex);
 
+
+
+
+  
+
   const handleDelete = (row) => {
     if (onDelete) onDelete(row);
     setTableData((prev) => prev.filter((r) => r.id !== row.id));
@@ -82,16 +87,19 @@ const CustomTable = ({
                 key={row.id || rowIndex}
                 className="bg-white border-b hover:bg-red-50 transition"
               >
-                
-                {columns.map((col) => (
-                  <td
-                    key={col.key}
-                    className="px-6 py-4 whitespace-nowrap text-right"
-                  >
-                    
-                    {row[col.key]}
-                  </td>
-                ))}
+                {columns.map((col) => {
+                  const value = col.key
+                    .split(".")
+                    .reduce((obj, k) => obj?.[k], row);
+                  return (
+                    <td
+                      key={col.key}
+                      className="px-6 py-4 whitespace-nowrap text-right"
+                    >
+                      {value}
+                    </td>
+                  );
+                })}
 
                 {(onEdit || onDelete) && (
                   <td className="px-6 py-4 text-center">
