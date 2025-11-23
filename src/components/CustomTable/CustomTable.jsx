@@ -10,6 +10,27 @@ import {
 const toPersianNumber = (num) =>
   num.toString().replace(/\d/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[d]);
 
+const dropdowns = {
+  status: {
+    ACTIVE: "فعال",
+    REPAIRING: "درحال تعمیر",
+    DECOMMISSIONED: "از رده خارج",
+  },
+  department: {
+    IT: "انفورماتیک",
+    PREVENTION: "پیشگیری",
+    STATION: "ایستگاه",
+    FINANCIAL: "مالی",
+    MANAGER: "مدیریت",
+  },
+  typeId: {
+    PC: "کامپیوتر",
+    PRINTER: "پرینتر",
+    LAPTOP: "لپ‌تاپ",
+    MONITOR: "مانیتور",
+  },
+};
+
 const CustomTable = ({
   columns = [],
   data = [],
@@ -30,11 +51,6 @@ const CustomTable = ({
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentData = tableData.slice(startIndex, endIndex);
-
-
-
-
-  
 
   const handleDelete = (row) => {
     if (onDelete) onDelete(row);
@@ -91,12 +107,22 @@ const CustomTable = ({
                   const value = col.key
                     .split(".")
                     .reduce((obj, k) => obj?.[k], row);
+
+                  // 🔹 تبدیل انگلیسی به فارسی با dropdowns
+                  let displayValue = value;
+                  if (col.key === "status")
+                    displayValue = dropdowns.status[value] || value;
+                  else if (col.key === "department")
+                    displayValue = dropdowns.department[value] || value;
+                  else if (col.key === "typeRef.name")
+                    displayValue = dropdowns.typeId[value] || value;
+
                   return (
                     <td
                       key={col.key}
                       className="px-6 py-4 whitespace-nowrap text-right"
                     >
-                      {value}
+                      {displayValue}
                     </td>
                   );
                 })}
@@ -107,7 +133,7 @@ const CustomTable = ({
                       {onEdit && (
                         <button
                           onClick={() => handleEdit(row)}
-                          className="p-2 rounded-full bg-red-50 text-red-500 hover:bg-red-100 transition"
+                          className="p-2 rounded-full bg-blue-50 text-blue-500 hover:bg-blue-100 transition"
                           title="ویرایش"
                         >
                           <PencilSquareIcon className="h-5 w-5" />

@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import {
-  ChevronDownIcon, ChevronUpIcon, Bars3Icon, ArchiveBoxIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+  Bars3Icon,
+  ArchiveBoxIcon,
   BellAlertIcon,
   ChartBarIcon,
   WrenchIcon,
@@ -19,10 +22,7 @@ const Sidebar = () => {
       title: "آمار اموال",
       icon: <ArchiveBoxIcon className="w-5 h-5" />,
       path: "/property",
-      submenus: [
-        { title: "لیست اموال", path: "/property/list" },
-        { title: "گزارش‌گیری", path: "/property/report" },
-      ],
+      submenus: [{ title: "لیست اموال", path: "/property/list" }],
     },
     {
       title: "هشدارها و ایمیل",
@@ -74,18 +74,22 @@ const Sidebar = () => {
     },
   ];
 
-
   const toggleSubmenu = (title) => {
     setOpenMenus((prev) => ({ ...prev, [title]: !prev[title] }));
   };
 
   return (
     <aside
-      className={`hidden md:flex flex-col bg-white transition-all duration-300 ${isOpen ? "w-64" : "w-20"
-        }`}
+      className={`hidden md:flex flex-col bg-white transition-all duration-300 ${
+        isOpen ? "w-64" : "w-20"
+      }`}
     >
       <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200">
-        {isOpen && <h1 className="text-sm font-bold text-red-600">سازمان آتش نشانی و خدمات ایمنی شهرداری اصفهان</h1>}
+        {isOpen && (
+          <h1 className="text-sm font-bold text-red-600">
+            سازمان آتش نشانی و خدمات ایمنی شهرداری اصفهان
+          </h1>
+        )}
         <button
           onClick={() => setIsOpen((p) => !p)}
           className="p-1 rounded hover:bg-red-100 transition"
@@ -101,8 +105,9 @@ const Sidebar = () => {
             <div key={item.title}>
               <div
                 onClick={() => toggleSubmenu(item.title)}
-                className={`flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer hover:bg-red-50 ${isActive ? "bg-red-100 text-red-700" : "text-gray-700"
-                  }`}
+                className={`flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer hover:bg-red-50 ${
+                  isActive ? "bg-red-100 text-red-700" : "text-gray-700"
+                }`}
               >
                 <div className="flex items-center gap-3">
                   {item.icon}
@@ -121,10 +126,11 @@ const Sidebar = () => {
                     <Link
                       key={sub.path}
                       to={sub.path}
-                      className={`block text-sm px-3 py-1 rounded-md hover:bg-red-50 ${location.pathname === sub.path
-                        ? "text-red-600 font-semibold"
-                        : "text-gray-600"
-                        }`}
+                      className={`block text-sm px-3 py-1 rounded-md hover:bg-red-50 ${
+                        location.pathname === sub.path
+                          ? "text-red-600 font-semibold"
+                          : "text-gray-600"
+                      }`}
                     >
                       {sub.title}
                     </Link>

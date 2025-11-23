@@ -13,6 +13,9 @@ import {
   TagIcon,
   ChevronDownIcon,
   PlusIcon,
+  PrinterIcon,
+  QrCodeIcon,
+  CommandLineIcon,
 } from "@heroicons/react/24/outline";
 
 const PropertyListPage = () => {
@@ -39,7 +42,6 @@ const PropertyListPage = () => {
     department: false,
     typeId: false,
   });
-
   const [selected, setSelected] = useState({
     status: "",
     department: "",
@@ -78,7 +80,6 @@ const PropertyListPage = () => {
   const onSubmit = async (data) => {
     const formattedData = {
       ...data,
-      code: Number(data.code),
       typeId:
         selected.typeId === "PC"
           ? 1
@@ -99,7 +100,6 @@ const PropertyListPage = () => {
     } else {
       await createAsset(formattedData);
     }
-
     reset();
     setSelected({ status: "", department: "", typeId: "" });
   };
@@ -112,17 +112,12 @@ const PropertyListPage = () => {
   // 🔹 وقتی روی Edit کلیک میشه
   const handleEdit = (row) => {
     setEditingRow(row);
-
-    // پر کردن فیلدهای فرم
     setValue("name", row.name || "");
     setValue("code", row.code || "");
     setValue("owner", row.owner || "");
     setValue("address", row.address || "");
     setValue("description", row.description || "");
-    setValue("description", row.description || "");
-    setValue("description", row.description || "");
 
-    // انتخاب دراپ‌دان‌ها
     setSelected({
       status: row.status || "",
       department: row.department || "",
@@ -141,14 +136,29 @@ const PropertyListPage = () => {
   };
 
   const dropdowns = {
-    status: ["ACTIVE", "REPAIRING", "DECOMMISSIONED"],
-    department: ["IT", "PREVENTION", "STATION", "FINANCIAL", "MANAGER"],
-    typeId: ["PC", "PRINTER", "LAPTOP", "MONITOR"],
+    status: {
+      ACTIVE: "فعال",
+      REPAIRING: "درحال تعمیر",
+      DECOMMISSIONED: "از رده خارج",
+    },
+    department: {
+      IT: "انفورماتیک",
+      PREVENTION: "پیشگیری",
+      STATION: "ایستگاه",
+      FINANCIAL: "مالی",
+      MANAGER: "مدیریت",
+    },
+    typeId: {
+      PC: "کامپیوتر",
+      PRINTER: "پرینتر",
+      LAPTOP: "لپ‌تاپ",
+      MONITOR: "مانیتور",
+    },
   };
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen flex justify-center  ">
-      <div className="bg-white shadow-md rounded-xl p-8  w-4/5">
+    <div className="p-6 bg-white min-h-screen flex justify-center">
+      <div className="p-8 w-4/5">
         <h2 className="flex items-center gap-2 font-bold text-gray-800 mb-5 text-xl">
           <PlusIcon className="w-5 h-5 text-red-500" />
           {editingRow ? "ویرایش اموال" : "ثبت اموال سازمان"}
@@ -166,14 +176,13 @@ const PropertyListPage = () => {
                 نام
               </label>
               <div className="relative mt-1">
-                <UserIcon className="absolute left-2 top-2 h-5 w-5 text-gray-400" />
+                <PrinterIcon className="absolute left-2 top-2 h-5 w-5 text-gray-400" />
                 <input
                   {...register("name", {
-                    required: { value: true, message: "نام الزامی است" },
+                    required: { value: true, message: "ورورد نام الزامی است" },
                   })}
-                  className="w-full rounded-lg border border-gray-300 bg-white py-2 px-3 text-sm text-gray-700 
-                    hover:border-gray-400 focus:border-red-400 focus:ring-2 focus:ring-red-300 transition-all pl-8 focus:outline-none"
-                  placeholder="مثلاً چاپگر"
+                  className="w-full rounded-lg border border-gray-300 bg-white py-2 px-3 text-sm text-gray-700 hover:border-gray-400 focus:border-red-400 focus:ring-2 focus:ring-red-300 transition-all pl-8 focus:outline-none"
+                  placeholder="مثلاً پرینتر"
                 />
                 {errors.name && (
                   <p className="text-red-600 text-sm mt-1">
@@ -189,16 +198,23 @@ const PropertyListPage = () => {
                 کد
               </label>
               <div className="relative mt-1">
-                <IdentificationIcon className="absolute left-2 top-2 h-5 w-5 text-gray-400" />
+                <QrCodeIcon className="absolute left-2 top-2 h-5 w-5 text-gray-400" />
                 <input
-                  type="number"
+                  type="text"
                   {...register("code", {
-                    required: { value: true, message: "کد الزامی است" },
+                    required: {
+                      value: true,
+                      message: "ورورد کد اموال الزامی است",
+                    },
                   })}
-                  className="w-full rounded-lg border border-gray-300 bg-white py-2 px-3 text-sm text-gray-700  
-                    hover:border-gray-400 focus:border-red-400 focus:ring-2 focus:ring-red-300 transition-all pl-8 focus:outline-none"
+                  className="w-full rounded-lg border border-gray-300 bg-white py-2 px-3 text-sm text-gray-700 hover:border-gray-400 focus:border-red-400 focus:ring-2 focus:ring-red-300 transition-all pl-8 focus:outline-none"
                   placeholder="کد اموال"
                 />
+                {errors.code && (
+                  <p className="text-red-600 text-sm mt-1">
+                    {errors.code.message}
+                  </p>
+                )}
               </div>
             </div>
 
@@ -208,19 +224,26 @@ const PropertyListPage = () => {
                 مالک
               </label>
               <div className="relative mt-1">
-                <BuildingOfficeIcon className="absolute left-2 top-2 h-5 w-5 text-gray-400" />
+                <UserIcon className="absolute left-2 top-2 h-5 w-5 text-gray-400" />
                 <input
                   {...register("owner", {
-                    required: { value: true, message: "مالک الزامی است" },
+                    required: {
+                      value: true,
+                      message: "ورود نام صاحب اموال الزامی است",
+                    },
                   })}
-                  className="w-full rounded-lg border border-gray-300 bg-white py-2 px-3 text-sm text-gray-700  
-                    hover:border-gray-400 focus:border-red-400 focus:ring-2 focus:ring-red-300 transition-all pl-8 focus:outline-none"
+                  className="w-full rounded-lg border border-gray-300 bg-white py-2 px-3 text-sm text-gray-700 hover:border-gray-400 focus:border-red-400 focus:ring-2 focus:ring-red-300 transition-all pl-8 focus:outline-none"
                   placeholder="نام مالک"
                 />
+                {errors.owner && (
+                  <p className="text-red-600 text-sm mt-1">
+                    {errors.owner.message}
+                  </p>
+                )}
               </div>
             </div>
 
-            {/* دراپ‌دان‌ها (status, typeId, department) */}
+            {/* دراپ‌دان‌ها */}
             {["status", "typeId", "department"].map((key) => (
               <div key={key}>
                 <label className="block text-sm font-medium text-gray-600 mb-2">
@@ -234,34 +257,41 @@ const PropertyListPage = () => {
                   <button
                     type="button"
                     onClick={() => toggleDropdown(key)}
-                    className="w-full flex justify-between items-center rounded-lg border border-gray-300 bg-white py-2 px-3 text-sm text-gray-700  
-                      hover:border-gray-400 focus:border-red-400 focus:ring-2 focus:ring-red-300 transition-all"
+                    className="w-full flex justify-between items-center rounded-lg border border-gray-300 bg-white py-2 px-3 text-sm text-gray-700 transition-all"
                   >
-                    {selected[key] || `انتخاب ${key}`}
+                    {selected[key]
+                      ? dropdowns[key][selected[key]]
+                      : `انتخاب ${key}`}
                     <ChevronDownIcon
                       className={`w-5 h-5 text-gray-500 transition-transform duration-200 ${
                         dropdownOpen[key] ? "rotate-180" : ""
                       }`}
                     />
                   </button>
+
                   {dropdownOpen[key] && (
                     <div className="absolute mt-2 w-full rounded-lg bg-white border border-gray-200 shadow-lg z-10 overflow-hidden">
-                      {dropdowns[key].map((opt, idx) => (
+                      {Object.keys(dropdowns[key]).map((opt, idx) => (
                         <button
                           key={idx}
                           onClick={() => handleSelect(key, opt)}
                           className="w-full text-right px-4 py-2 text-sm text-gray-700 hover:bg-red-50 hover:text-red-500"
                         >
-                          {opt}
+                          {dropdowns[key][opt]}
                         </button>
                       ))}
                     </div>
+                  )}
+                  {!selected[key] && (
+                    <p className="text-red-600 text-sm mt-1">
+                      این فیلد الزامی است
+                    </p>
                   )}
                 </div>
               </div>
             ))}
 
-            {/* آدرس */}
+            {/* محل نگهداری */}
             <div className="md:col-span-2">
               <label className="block text-sm font-medium text-gray-600 mb-2">
                 محل نگهداری
@@ -269,11 +299,24 @@ const PropertyListPage = () => {
               <div className="relative mt-1">
                 <MapPinIcon className="absolute left-2 top-2 h-5 w-5 text-gray-400" />
                 <input
-                  {...register("address")}
-                  className="w-full rounded-lg border border-gray-300 bg-white py-2 px-3 text-sm text-gray-700  
-                    hover:border-gray-400 focus:border-red-400 focus:ring-2 focus:ring-red-300 transition-all pl-8 focus:outline-none"
+                  {...register("address", {
+                    required: {
+                      value: true,
+                      message: "ورود آدرس اموال الزامی است",
+                    },
+                    maxLength: {
+                      message: "وروردی کمتر از 30 حرف باید باشد",
+                      value: 30,
+                    },
+                  })}
+                  className="w-full rounded-lg border border-gray-300 bg-white py-2 px-3 text-sm text-gray-700 hover:border-gray-400 focus:border-red-400 focus:ring-2 focus:ring-red-300 transition-all pl-8 focus:outline-none"
                   placeholder="مثلاً انفورماتیک"
                 />
+                {errors.address && (
+                  <p className="text-red-600 text-sm mt-1">
+                    {errors.address.message}
+                  </p>
+                )}
               </div>
             </div>
 
@@ -283,12 +326,29 @@ const PropertyListPage = () => {
                 توضیحات
               </label>
               <textarea
-                {...register("description")}
-                className="w-full rounded-lg border border-gray-300 bg-white py-2 px-3 text-sm text-gray-700  
-                  hover:border-gray-400 focus:border-red-400 focus:ring-2 focus:ring-red-300 transition-all pl-8 focus:outline-none"
+                {...register("description", {
+                  required: {
+                    value: true,
+                    message: "ورود توضیحات اموال الزامی است",
+                  },
+                  maxLength: {
+                    message: "وروردی کمتر از 40 حرف باید باشد",
+                    value: 30,
+                  },
+                  minLength: {
+                    message: "وروردی بیشتر از 5 حرف باید باشد",
+                    value: 5,
+                  },
+                })}
+                className="w-full rounded-lg border border-gray-300 bg-white py-2 px-3 text-sm text-gray-700 hover:border-gray-400 focus:border-red-400 focus:ring-2 focus:ring-red-300 transition-all pl-8 focus:outline-none"
                 rows="3"
                 placeholder="توضیحات اختیاری..."
               ></textarea>
+              {errors.description && (
+                <p className="text-red-600 text-sm mt-1">
+                  {errors.description.message}
+                </p>
+              )}
             </div>
           </div>
 
@@ -305,7 +365,6 @@ const PropertyListPage = () => {
                 ? "ذخیره تغییرات"
                 : "ثبت اموال"}
             </button>
-
             {editingRow && (
               <button
                 type="button"

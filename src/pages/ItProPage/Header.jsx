@@ -42,10 +42,7 @@ const Header = () => {
       title: "آمار اموال",
       icon: <ArchiveBoxIcon className="w-5 h-5" />,
       path: "/property",
-      submenus: [
-        { title: "لیست اموال", path: "/property/list" },
-        { title: "گزارش‌گیری", path: "/property/report" },
-      ],
+      submenus: [{ title: "لیست اموال", path: "/property/list" }],
     },
     {
       title: "هشدارها و ایمیل",

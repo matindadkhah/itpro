@@ -11,20 +11,35 @@ export const usePropertyRegister = () => {
   );
 
   // ثبت اموال
+
   const createAsset = useCallback(
     async (assetData) => {
       dispatch({ type: "REGISTER_REQUEST" });
+
       try {
         const result = await RegisterPropertyService.createAsset(assetData);
+
+        // 🔹 بررسی تکراری بودن بر اساس id
+        const isDuplicate = Array.isArray(assetList)
+          ? assetList.some((asset) => asset.id === result.id)
+          : false;
+
+        if (isDuplicate) {
+          dispatch({ type: "REGISTER_FAIL" });
+          showToast.warning("⚠️ رکوردی با این شناسه قبلاً ثبت شده است!");
+          return null;
+        }
+
+        // اگر تکراری نبود، در state ذخیره شود
         dispatch({ type: "REGISTER_SUCCESS", payload: result });
-        showToast.success("اموال با موفقیت ثبت شد");
+        showToast.success("✅ اموال با موفقیت ثبت شد");
         return result;
       } catch (err) {
         dispatch({ type: "REGISTER_FAIL", payload: err });
-        showToast.error("عدم ثبت اموال");
+        showToast.error("❌ خطا در ثبت اموال");
       }
     },
-    [dispatch]
+    [dispatch, assetList] // 🔹 وابستگی جدید اضافه شد
   );
 
   // دریافت لیست اموال با skip و take
