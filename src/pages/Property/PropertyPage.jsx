@@ -49,9 +49,10 @@ export default function PropertyPage() {
         )}
 
         {activeTab === 2 && (
-          <div>
+          <div className="grid grid-cols-2">
             <p className="text-gray-500">
               <PropertySearch />
+            
             </p>
           </div>
         )}

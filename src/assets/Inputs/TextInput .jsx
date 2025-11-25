@@ -1,24 +1,31 @@
 // TextInput.jsx
-import React, { useState, useEffect } from 'react';
 
-const TextInput = ({ label, value = '', onChange, placeholder }) => {
-  const [text, setText] = useState(value);
+import { useState } from "react";
 
-  useEffect(() => {
-    setText(value);
-  }, [value]);
+// Text Input
+export const TextInput = ({ label, name, placeholder, onValueChange }) => {
+  const [value, setValue] = useState("");
 
   const handleChange = (e) => {
-    setText(e.target.value);
-    onChange?.(e.target.value);
+    const val = e.target.value;
+    setValue(val);
+    onValueChange && onValueChange(name, val);
   };
 
   return (
-    <div>
-      <label>{label}</label>
-      <input type="text" value={text} onChange={handleChange} placeholder={placeholder} />
+    <div className="flex flex-col gap-1">
+      <div className="relative w-full">
+        <label className="absolute -top-3 right-3 bg-white px-2 text-sm text-gray-600">
+          {label}
+        </label>
+
+        <input
+          type="text"
+          placeholder={placeholder}
+          className="w-full border border-gray-300 rounded-xl px-3 py-3 focus:outline-none focus:border-red-500"
+          onChange={handleChange}
+        />
+      </div>
     </div>
   );
 };
-
-export default TextInput;

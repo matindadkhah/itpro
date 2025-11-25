@@ -3,7 +3,9 @@ import SearchPropertyService from "../Services/SearchPropertyService";
 
 export const usePropertySearch = () => {
   const dispatch = useDispatch();
-  const { list, loading, error } = useSelector((state) => state.searchProperties);
+  const { list, loading, error } = useSelector(
+    (state) => state.searchProperties
+  );
 
   const service = new SearchPropertyService();
 
@@ -12,6 +14,7 @@ export const usePropertySearch = () => {
 
     try {
       const data = await service.searchAssets(filters);
+    
       dispatch({ type: "PROPERTY_SEARCH_SUCCESS", payload: data });
     } catch (err) {
       dispatch({
