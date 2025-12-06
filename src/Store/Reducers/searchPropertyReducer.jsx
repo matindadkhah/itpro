@@ -19,3 +19,4 @@ export default function searchPropertyReducer(state = initialState, action) {
       return state;
   }
 }
+

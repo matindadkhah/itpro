@@ -1,11 +1,9 @@
-body{
-    background-color: rgb(255, 255, 255);
-    direction: rtl;
-     font-family: 'Shabnam', sans-serif;
+body {
+  background-color: rgb(255, 255, 255);
+  direction: rtl;
+  font-family: "Shabnam", sans-serif;
 }
 
 .rmdp-container {
-    display: block  !important;
+  display: block !important;
 }
-
-

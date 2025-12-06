@@ -9,7 +9,8 @@ module.exports = {
     extend: {
       fontFamily: {
         shabnam: ['Shabnam', 'sans-serif']
-      }
+      },
+      
     },
   },
   plugins: [

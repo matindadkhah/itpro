@@ -14,7 +14,7 @@ export const usePropertySearch = () => {
 
     try {
       const data = await service.searchAssets(filters);
-    
+
       dispatch({ type: "PROPERTY_SEARCH_SUCCESS", payload: data });
     } catch (err) {
       dispatch({
