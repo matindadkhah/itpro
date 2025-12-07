@@ -4,9 +4,22 @@ import { TextInput } from "../../assets/Inputs/TextInput ";
 import { SelectInput } from "../../assets/Inputs/SelectInput";
 import { FunnelIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { useSelector } from "react-redux";
+import usePagination from "../../Hooks/usePagination";
 
 export default function SearchFilterForm() {
   const { searchProperties } = usePropertySearch();
+  const { list } = usePropertySearch();
+  const {
+    currentPage,
+    totalPages,
+    currentData,
+    goToPage,
+    next,
+    prev,
+    isFirstPage,
+    isLastPage,
+    paginationControls, // 🎉 آیتم‌های آماده برای رندر Pagination
+  } = usePagination(list, 3);
 
   const [filter, setFilter] = useState({
     name: "",
@@ -54,10 +67,10 @@ export default function SearchFilterForm() {
     e.preventDefault();
     await searchProperties(filter);
   };
-  const { list } = usePropertySearch();
+
 
   return (
-    <div className="bg-white  p-4  h-screen rounded-l-2xl">
+    <div className="bg-white relative p-4  h-screen rounded-l-2xl">
       <h2 class="flex items-center gap-2 font-bold text-gray-800 mb-5 text-xl">
         <FunnelIcon className="w-5 h-5 text-red-500" />
         جستجوی پیشرفته
@@ -138,9 +151,9 @@ export default function SearchFilterForm() {
         لیست جستجو
       </div>
 
-      <div className="grid grid-cols-3  p-4 gap-6">
-        <div className="grid gap-6">
-          {list.map((item) => (
+      <div >
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 p-4 gap-6">
+          {currentData.map((item) => (
             <div
               key={item.id}
               className="relative bg-white rounded-2xl p-6 shadow-xl"
@@ -163,13 +176,12 @@ export default function SearchFilterForm() {
                   <span>{item.name}</span>
                 </div>
                 <div
-                  className={`${
-                    item.status === "ACTIVE"
-                      ? "bg-green-100"
-                      : item.status === "REPAIRING"
+                  className={`${item.status === "ACTIVE"
+                    ? "bg-green-100"
+                    : item.status === "REPAIRING"
                       ? "bg-yellow-100"
                       : "bg-red-100"
-                  } box text-[12px] font-semibold bg-gray-100 rounded-lg p-1 flex justify-between items-center gap-1`}
+                    } box text-[12px] font-semibold bg-gray-100 rounded-lg p-1 flex justify-between items-center gap-1`}
                 >
                   <p>وضعیت</p>
                   {statusText(item.status)}
@@ -187,6 +199,61 @@ export default function SearchFilterForm() {
           ))}
         </div>
       </div>
+      {/* --- Pagination Controls (فقط رندر) --- */}
+      {totalPages > 1 && (
+        <div
+          className="absolute bottom-0 right-0 left-0 p-4 z-10"
+        >
+          <div className="flex justify-center items-center space-x-2 space-x-reverse">
+
+            {/* دکمه قبلی */}
+            <button
+              onClick={prev}
+              disabled={isFirstPage}
+              className="px-4 py-2 text-sm text-gray-700 bg-white border rounded-full hover:bg-gray-100 disabled:opacity-50 transition duration-150"
+            >
+              قبلی
+            </button>
+
+            {/* 🔑 پیمایش آیتم‌های Pagination که از هوک آمده‌اند */}
+            {paginationControls.map((control) => {
+              if (control.type === 'ellipsis') {
+                return <span key={control.key} className="px-2 text-gray-500">...</span>;
+              }
+
+              if (control.type === 'page') {
+                return (
+                  <button
+                    key={control.number}
+                    onClick={() => goToPage(control.number)}
+                    className={`px-4 py-2 text-sm rounded-full transition duration-150 ${control.active
+                        ? 'bg-red-600 text-white shadow-md'
+                        : 'text-gray-700 bg-white border hover:bg-gray-100'
+                      }`}
+                  >
+                    {control.number}
+                  </button>
+                );
+              }
+              return null;
+            })}
+
+            {/* دکمه بعدی */}
+            <button
+              onClick={next}
+              disabled={isLastPage}
+              className="px-4 py-2 text-sm text-gray-700 bg-white border rounded-full hover:bg-gray-100 disabled:opacity-50 transition duration-150"
+            >
+              بعدی
+            </button>
+
+            <div className="text-center absolute left-10 text-xs text-gray-500 hidden sm:block">
+              صفحه {currentPage} از {totalPages}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
+
   );
 }
