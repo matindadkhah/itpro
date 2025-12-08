@@ -3,11 +3,10 @@ import { usePropertySearch } from "../../Hooks/usePropertySearch";
 import { TextInput } from "../../assets/Inputs/TextInput ";
 import { SelectInput } from "../../assets/Inputs/SelectInput";
 import { FunnelIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { useSelector } from "react-redux";
 import usePagination from "../../Hooks/usePagination";
 
 export default function SearchFilterForm() {
-  const { searchProperties } = usePropertySearch();
+  const { searchProperties, loading } = usePropertySearch();
   const { list } = usePropertySearch();
   const {
     currentPage,
@@ -19,7 +18,7 @@ export default function SearchFilterForm() {
     isFirstPage,
     isLastPage,
     paginationControls, // 🎉 آیتم‌های آماده برای رندر Pagination
-  } = usePagination(list, 3);
+  } = usePagination(list, 6);
 
   const [filter, setFilter] = useState({
     name: "",
@@ -67,7 +66,6 @@ export default function SearchFilterForm() {
     e.preventDefault();
     await searchProperties(filter);
   };
-
 
   return (
     <div className="bg-white relative p-4  h-screen rounded-l-2xl">
@@ -140,9 +138,15 @@ export default function SearchFilterForm() {
         <div>
           <button
             type="submit"
-            className="bg-red-400 text-white px-6 py-2 rounded-xl hover:bg-red-500 flex items-center justify-center gap-2"
+            className={`flex items-center justify-between gap-2 px-4 py-2 rounded-xl font-semibold transition 
+    ${
+      loading
+        ? "bg-red-400 cursor-not-allowed"
+        : "bg-red-500 text-white hover:bg-red-600"
+    }
+  `}
           >
-            <p>جستجو</p>
+            {loading ? " در حال جستجو" : "جستجو"}
             <MagnifyingGlassIcon className="w-4 h-4 text-white" />
           </button>
         </div>
@@ -151,61 +155,80 @@ export default function SearchFilterForm() {
         لیست جستجو
       </div>
 
-      <div >
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 p-4 gap-6">
-          {currentData.map((item) => (
-            <div
-              key={item.id}
-              className="relative bg-white rounded-2xl p-6 shadow-xl"
-            >
-              <div className="flex justify-start items-center gap-3 ">
-                <span className="bg-red-50 text-red-700 p-2 rounded-full flex flex-shrink-0 text-sm">
-                  MJ
-                </span>
-                <div className="flex flex-col gap-1">
-                  <span className="text-gray-600">{item.owner}</span>
-                  <span className="text-[12px] pr-1">
-                    رئیس اداره انفورماتیک
+      <div className="p-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {currentData && currentData.length > 0 ? (
+            currentData.map((item) => (
+              <div
+                key={item.id}
+                className="relative bg-white rounded-2xl p-6 shadow-xl"
+              >
+                {/* HEADER */}
+                <div className="flex justify-start items-center gap-3">
+                  <span className="bg-red-50 text-red-700 p-2 rounded-full flex flex-shrink-0 text-sm">
+                    MJ
                   </span>
+
+                  <div className="flex flex-col gap-1">
+                    <span className="text-gray-700 text-[13px]">
+                      {item.owner}
+                    </span>
+                    <span className="text-[12px] text-gray-500">
+                      رئیس اداره انفورماتیک
+                    </span>
+                  </div>
+                </div>
+
+                <hr className="border-red-200 my-2" />
+
+                {/* BODY */}
+                <div className="flex gap-2 flex-wrap">
+                  {/* نام */}
+                  <div className="text-[12px] font-semibold bg-gray-100 rounded-lg p-1 px-2 flex justify-between items-center min-w-[48%]">
+                    <p>نام</p>
+                    <span>{item.name}</span>
+                  </div>
+
+                  {/* وضعیت */}
+                  <div
+                    className={`${
+                      item.status === "ACTIVE"
+                        ? "bg-green-100"
+                        : item.status === "REPAIRING"
+                        ? "bg-yellow-100"
+                        : "bg-red-100"
+                    } text-[12px] font-semibold rounded-lg p-1 px-2 flex justify-between items-center min-w-[48%]`}
+                  >
+                    <p>وضعیت</p>
+                    {statusText(item.status)}
+                  </div>
+
+                  {/* دسته */}
+                  <div className="text-[12px] font-semibold bg-gray-100 rounded-lg p-1 px-2 flex justify-between items-center min-w-[48%]">
+                    <p>دسته</p>
+                    {category(item.typeRef.id)}
+                  </div>
+
+                  {/* دپارتمان */}
+                  <div className="text-[12px] font-semibold bg-gray-100 rounded-lg p-1 px-2 flex justify-between items-center min-w-[48%]">
+                    <p>دپارتمان</p>
+                    {item.department}
+                  </div>
                 </div>
               </div>
-              <hr class="border-red-200 my-2"></hr>
-              <div className="flex gap-1.5 flex-wrap">
-                <div className="text-[12px] font-semibold bg-gray-100 rounded-lg p-1 flex justify-between items-center gap-1">
-                  <p>نام</p>
-                  <span>{item.name}</span>
-                </div>
-                <div
-                  className={`${item.status === "ACTIVE"
-                    ? "bg-green-100"
-                    : item.status === "REPAIRING"
-                      ? "bg-yellow-100"
-                      : "bg-red-100"
-                    } box text-[12px] font-semibold bg-gray-100 rounded-lg p-1 flex justify-between items-center gap-1`}
-                >
-                  <p>وضعیت</p>
-                  {statusText(item.status)}
-                </div>
-                <div className="text-[12px] font-semibold gap-1 bg-gray-100 rounded-lg p-1 flex justify-between items-center">
-                  <p>دسته</p>
-                  {category(item.typeRef.id)}
-                </div>
-                <div className="text-[12px] bg-gray-100 font-semibold gap-1  rounded-lg p-1 flex justify-between items-center">
-                  <p>دپارتمان</p>
-                  {item.department}
-                </div>
-              </div>
+            ))
+          ) : (
+            <div className="flex justify-center items-center text-center text-gray-500 w-full">
+              <p>هیچ ایتمی جهت نمایش وجود ندارد</p>
             </div>
-          ))}
+          )}
         </div>
       </div>
+
       {/* --- Pagination Controls (فقط رندر) --- */}
       {totalPages > 1 && (
-        <div
-          className="absolute bottom-0 right-0 left-0 p-4 z-10"
-        >
+        <div className="absolute bottom-0 right-0 left-0 p-4 z-10">
           <div className="flex justify-center items-center space-x-2 space-x-reverse">
-
             {/* دکمه قبلی */}
             <button
               onClick={prev}
@@ -217,19 +240,24 @@ export default function SearchFilterForm() {
 
             {/* 🔑 پیمایش آیتم‌های Pagination که از هوک آمده‌اند */}
             {paginationControls.map((control) => {
-              if (control.type === 'ellipsis') {
-                return <span key={control.key} className="px-2 text-gray-500">...</span>;
+              if (control.type === "ellipsis") {
+                return (
+                  <span key={control.key} className="px-2 text-gray-500">
+                    ...
+                  </span>
+                );
               }
 
-              if (control.type === 'page') {
+              if (control.type === "page") {
                 return (
                   <button
                     key={control.number}
                     onClick={() => goToPage(control.number)}
-                    className={`px-4 py-2 text-sm rounded-full transition duration-150 ${control.active
-                        ? 'bg-red-600 text-white shadow-md'
-                        : 'text-gray-700 bg-white border hover:bg-gray-100'
-                      }`}
+                    className={`px-4 py-2 text-sm rounded-full transition duration-150 ${
+                      control.active
+                        ? "bg-red-600 text-white shadow-md"
+                        : "text-gray-700 bg-white border hover:bg-gray-100"
+                    }`}
                   >
                     {control.number}
                   </button>
@@ -254,6 +282,5 @@ export default function SearchFilterForm() {
         </div>
       )}
     </div>
-
   );
 }
