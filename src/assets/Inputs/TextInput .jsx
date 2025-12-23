@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 // Text Input
-export const TextInput = ({ label, name, placeholder, onValueChange }) => {
+export const TextInput = ({ label, name, placeholder, onValueChange,register,rules,error }) => {
   const [value, setValue] = useState("");
 
   const handleChange = (e) => {
@@ -15,17 +15,25 @@ export const TextInput = ({ label, name, placeholder, onValueChange }) => {
   return (
     <div className="flex flex-col gap-1">
       <div className="relative w-full">
-        <label className="absolute -top-3 right-3 bg-white px-2 text-sm text-gray-600">
+        <label className="absolute -top-3 right-3 bg-white px-2 text-[12px] font-medium text-gray-600">
           {label}
         </label>
-
         <input
           type="text"
           placeholder={placeholder}
-          className="w-full border border-gray-300 rounded-xl px-3 py-3 focus:outline-none focus:border-red-500"
           onChange={handleChange}
+          {...register(name, rules)}
+          className={`
+           w-full border border-gray-300 rounded-xl px-2 py-2 focus:outline-none focus:border-gray-400
+            ${error ? "border-red-500 focus:border-red-500" : "border-gray-300 focus:border-gray-400"}
+          `}
         />
       </div>
+      {error && (
+        <span className="text-red-500 text-[11px] mt-1">
+          {error}
+        </span>
+      )}
     </div>
   );
 };

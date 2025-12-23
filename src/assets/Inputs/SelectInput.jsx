@@ -36,18 +36,18 @@ export const SelectInput = ({
   return (
     <div className="flex flex-col gap-1 relative w-full" ref={dropdownRef}>
       <div className="relative w-full">
-        <label className="absolute -top-3 right-3 bg-white px-2 text-sm text-gray-600">
+        <label class="absolute -top-3 right-3 bg-white px-2 text-[12px] font-medium text-gray-600">
           {label}
         </label>
 
         <button
           type="button"
           onClick={toggleDropdown}
-          className={`w-full flex justify-between items-center rounded-xl  border border-gray-300 bg-white py-4 px-3 text-sm  focus:outline-none focus:border-red-500 text-gray-700 transition-all`}
+          className={`w-full flex justify-between items-center rounded-xl  border border-gray-300 bg-white py-3 px-3 text-sm  focus:outline-none focus:border-gray-500 text-gray-400 transition-all`}
         >
           {selected !== "" && selected !== null
             ? options[selected]
-            : `انتخاب ${label}`}
+            : ` ${label}`}
           <ChevronDownIcon
             className={`w-5 h-5 text-gray-500 transition-transform duration-200 ${
               isOpen ? "rotate-180" : ""

@@ -48,9 +48,8 @@ const Sidebar = () => {
       icon: <WrenchIcon className="w-5 h-5" />,
       path: "/repairs",
       submenus: [
-        { title: "دستگاه‌های تحویل شده", path: "/repairs/delivered" },
-        { title: "در حال تعمیر", path: "/repairs/repairing" },
-        { title: "تحویل گرفته شده", path: "/repairs/repairinglist" },
+        { title: "ثبت دستگاه جدید", path: "/repairs/register" },
+        { title: "لیست دستگاه ها", path: "/repairs/list" }
       ],
     },
     {
@@ -80,9 +79,8 @@ const Sidebar = () => {
 
   return (
     <aside
-      className={`hidden md:flex flex-col bg-white transition-all duration-300 ${
-        isOpen ? "w-64" : "w-20"
-      }`}
+      className={`hidden md:flex flex-col bg-white transition-all duration-300 ${isOpen ? "w-64" : "w-20"
+        }`}
     >
       <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200">
         {isOpen && (
@@ -105,9 +103,8 @@ const Sidebar = () => {
             <div key={item.title}>
               <div
                 onClick={() => toggleSubmenu(item.title)}
-                className={`flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer hover:bg-red-50 ${
-                  isActive ? "bg-red-100 text-red-700" : "text-gray-700"
-                }`}
+                className={`flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer hover:bg-red-50 ${isActive ? "bg-red-100 text-red-700" : "text-gray-700"
+                  }`}
               >
                 <div className="flex items-center gap-3">
                   {item.icon}
@@ -126,11 +123,10 @@ const Sidebar = () => {
                     <Link
                       key={sub.path}
                       to={sub.path}
-                      className={`block text-sm px-3 py-1 rounded-md hover:bg-red-50 ${
-                        location.pathname === sub.path
+                      className={`block text-sm px-3 py-1 rounded-md hover:bg-red-50 ${location.pathname === sub.path
                           ? "text-red-600 font-semibold"
                           : "text-gray-600"
-                      }`}
+                        }`}
                     >
                       {sub.title}
                     </Link>

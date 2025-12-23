@@ -68,9 +68,8 @@ const Header = () => {
       icon: <WrenchIcon className="w-5 h-5" />,
       path: "/repairs",
       submenus: [
-        { title: "دستگاه‌های تحویل شده", path: "/repairs/delivered" },
-        { title: "در حال تعمیر", path: "/repairs/repairing" },
-        { title: "تحویل گرفته شده", path: "/repairs/repairinglist" },
+        { title: "ثبت دستگاه جدید", path: "/repairs/register" },
+        { title: "لیست دستگاه ها", path: "/repairs/list" },
       ],
     },
     {
