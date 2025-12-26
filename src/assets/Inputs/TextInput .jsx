@@ -22,18 +22,13 @@ export const TextInput = ({ label, name, placeholder, onValueChange,register,rul
           type="text"
           placeholder={placeholder}
           onChange={handleChange}
-          {...register(name, rules)}
           className={`
            w-full border border-gray-300 rounded-xl px-2 py-2 focus:outline-none focus:border-gray-400
             ${error ? "border-red-500 focus:border-red-500" : "border-gray-300 focus:border-gray-400"}
           `}
         />
       </div>
-      {error && (
-        <span className="text-red-500 text-[11px] mt-1">
-          {error}
-        </span>
-      )}
+ 
     </div>
   );
 };

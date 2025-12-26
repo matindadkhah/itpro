@@ -12,9 +12,9 @@
   font-family: Shabnam;
   src: url('/node_modules/shabnam-font/dist/Shabnam.eot');
   src: url('/node_modules/shabnam-font/dist/Shabnam.eot?#iefix') format('embedded-opentype'),
-       url('/node_modules/shabnam-font/dist/Shabnam.woff2') format('woff2'),
-       url('/node_modules/shabnam-font/dist/Shabnam.woff') format('woff'),
-       url('/node_modules/shabnam-font/dist/Shabnam.ttf') format('truetype');
+    url('/node_modules/shabnam-font/dist/Shabnam.woff2') format('woff2'),
+    url('/node_modules/shabnam-font/dist/Shabnam.woff') format('woff'),
+    url('/node_modules/shabnam-font/dist/Shabnam.ttf') format('truetype');
   font-weight: normal;
 }
 
@@ -22,9 +22,9 @@
   font-family: Shabnam;
   src: url('/node_modules/shabnam-font/dist/Shabnam-Bold.eot');
   src: url('/node_modules/shabnam-font/dist/Shabnam-Bold.eot?#iefix') format('embedded-opentype'),
-       url('/node_modules/shabnam-font/dist/Shabnam-Bold.woff2') format('woff2'),
-       url('/node_modules/shabnam-font/dist/Shabnam-Bold.woff') format('woff'),
-       url('/node_modules/shabnam-font/dist/Shabnam-Bold.ttf') format('truetype');
+    url('/node_modules/shabnam-font/dist/Shabnam-Bold.woff2') format('woff2'),
+    url('/node_modules/shabnam-font/dist/Shabnam-Bold.woff') format('woff'),
+    url('/node_modules/shabnam-font/dist/Shabnam-Bold.ttf') format('truetype');
   font-weight: bold;
 }
 
@@ -32,9 +32,9 @@
   font-family: Shabnam;
   src: url('/node_modules/shabnam-font/dist/Shabnam-Thin.eot');
   src: url('/node_modules/shabnam-font/dist/Shabnam-Thin.eot?#iefix') format('embedded-opentype'),
-       url('/node_modules/shabnam-font/dist/Shabnam-Thin.woff2') format('woff2'),
-       url('/node_modules/shabnam-font/dist/Shabnam-Thin.woff') format('woff'),
-       url('/node_modules/shabnam-font/dist/Shabnam-Thin.ttf') format('truetype');
+    url('/node_modules/shabnam-font/dist/Shabnam-Thin.woff2') format('woff2'),
+    url('/node_modules/shabnam-font/dist/Shabnam-Thin.woff') format('woff'),
+    url('/node_modules/shabnam-font/dist/Shabnam-Thin.ttf') format('truetype');
   font-weight: 100;
 }
 
@@ -42,9 +42,9 @@
   font-family: Shabnam;
   src: url('/node_modules/shabnam-font/dist/Shabnam-Light.eot');
   src: url('vShabnam-Light.eot?#iefix') format('embedded-opentype'),
-       url('/node_modules/shabnam-font/dist/Shabnam-Light.woff2') format('woff2'),
-       url('/node_modules/shabnam-font/dist/Shabnam-Light.woff') format('woff'),
-       url('/node_modules/shabnam-font/dist/Shabnam-Light.ttf') format('truetype');
+    url('/node_modules/shabnam-font/dist/Shabnam-Light.woff2') format('woff2'),
+    url('/node_modules/shabnam-font/dist/Shabnam-Light.woff') format('woff'),
+    url('/node_modules/shabnam-font/dist/Shabnam-Light.ttf') format('truetype');
   font-weight: 300;
 }
 
@@ -52,9 +52,42 @@
   font-family: Shabnam;
   src: url('/node_modules/shabnam-font/dist/Shabnam-Medium.eot');
   src: url('/node_modules/shabnam-font/dist/Shabnam-Medium.eot?#iefix') format('embedded-opentype'),
-       url('/node_modules/shabnam-font/dist/Shabnam-Medium.woff2') format('woff2'),
-       url('/node_modules/shabnam-font/dist/Shabnam-Medium.woff') format('woff'),
-       url('/node_modules/shabnam-font/dist/Shabnam-Medium.ttf') format('truetype');
+    url('/node_modules/shabnam-font/dist/Shabnam-Medium.woff2') format('woff2'),
+    url('/node_modules/shabnam-font/dist/Shabnam-Medium.woff') format('woff'),
+    url('/node_modules/shabnam-font/dist/Shabnam-Medium.ttf') format('truetype');
   font-weight: 500;
 }
 
+.card-wrapper {
+  position: relative;
+  width: 100%;
+  /* تمام عرض ستون گرید را می‌گیرد */
+  max-width: 600px;
+  /* از این مقدار بزرگتر نمی‌شود */
+  margin: 0 auto;
+}
+
+
+.inverted {
+  clip-path: path("M30,0H540A20,20 0,0,1 560,20V20A20,20 0,0,0 580,40H580A20,20 0,0,1 600,60V170A30,30 0,0,1 570,200H30A30,30 0,0,1 0,170V30A30,30 0,0,1 30,0Z");
+  width: 100%;
+  height: 200px;
+  background-color: #FF6F61;
+  aspect-ratio: 3 / 1;
+}
+
+.avatar {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 12%;
+  /* اندازه آواتار نسبت به عرض کارت تغییر می‌کند */
+  min-width: 40px;
+  /* اما از یک حدی کوچکتر نمی‌شود */
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #fff;
+  border: 2px solid white;
+  z-index: 10;
+}
